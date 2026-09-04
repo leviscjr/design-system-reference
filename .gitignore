@@ -1,0 +1,32 @@
+# OS / editor cruft (defensive — this repo has no build system of its own)
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+.vscode/
+.idea/
+
+*.swp
+*.swo
+*~
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+*.key
+*.pem
+*.p12
+*.pfx
+
+# Defensive only — accidental local artifacts from tooling that might touch
+# this repo; does not imply Python or Node as project dependencies.
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+node_modules/
+dist/
+build/

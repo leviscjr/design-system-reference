@@ -1,0 +1,953 @@
+<!doctype html>
+<!--
+  ILUSTRATIVO, NÃO NORMATIVO.
+  Gerado a partir de tokens.json (Shared_Arch design-system-export).
+  A especificação normativa é DESIGN_SYSTEM.md — se algo aqui divergir dele,
+  é um bug deste arquivo, não uma correção da regra.
+  HTML/CSS/JS puro. Zero build. Zero dependência externa.
+-->
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Design System Reference</title>
+<style>
+  /* ===== semantic.color (tokens.json) — light ===== */
+  :root {
+    --sa-bg: #F4F6FB;
+    --sa-surface: #FFFFFF;
+    --sa-surface-alt: #F8FAFC;
+    --sa-border: #E2E8F0;
+    --sa-text: #0F172A;
+    --sa-text-secondary: #475569;
+    --sa-primary: #1E3A8A;
+    --sa-primary-dark: #152A63;
+    --sa-primary-soft-bg: #EFF4FF;
+    --sa-primary-soft-border: #DBE4FF;
+    --sa-accent: #2563EB;
+    --sa-positive: #16A34A;
+    --sa-warning: #D97706;
+    --sa-negative: #DC2626;
+    --sa-info: #2563EB;
+    --sa-on-primary: #FFFFFF;
+    --sa-on-positive: #FFFFFF;
+    --sa-on-warning: #FFFFFF;
+    --sa-on-negative: #FFFFFF;
+    --sa-shadow-primary: #2563EB;
+    --sa-map-selected: #DC2626;
+    --sa-export-bg: #FFFFFF;
+
+    /* primitive.spacing */
+    --sa-space-xs: 4px; --sa-space-sm: 8px; --sa-space-md: 12px;
+    --sa-space-lg: 16px; --sa-space-xl: 24px; --sa-space-xxl: 32px;
+    /* primitive.radius */
+    --sa-radius-sm: 4px; --sa-radius-md: 8px; --sa-radius-lg: 12px; --sa-radius-full: 999px;
+  }
+
+  /* ===== semantic.color — dark (mesmas chaves, paridade obrigatória) ===== */
+  html[data-theme="dark"] {
+    --sa-bg: #0B1220;
+    --sa-surface: #111827;
+    --sa-surface-alt: #0F172A;
+    --sa-border: #243043;
+    --sa-text: #E5E9F0;
+    --sa-text-secondary: #94A3B8;
+    --sa-primary: #6D8CFF;
+    --sa-primary-dark: #4F6FDB;
+    --sa-primary-soft-bg: rgba(109, 140, 255, 0.14);
+    --sa-primary-soft-border: rgba(109, 140, 255, 0.35);
+    --sa-accent: #60A5FA;
+    --sa-positive: #4ADE80;
+    --sa-warning: #FBBF24;
+    --sa-negative: #F87171;
+    --sa-info: #60A5FA;
+    --sa-on-primary: #FFFFFF;
+    --sa-on-positive: #FFFFFF;
+    --sa-on-warning: #FFFFFF;
+    --sa-on-negative: #FFFFFF;
+    --sa-shadow-primary: #60A5FA;
+    --sa-map-selected: #DC2626;
+    --sa-export-bg: #FFFFFF;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--sa-bg);
+    color: var(--sa-text);
+    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    padding: 24px;
+    max-width: 980px;
+    margin: 0 auto;
+  }
+
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  .sa-lede { color: var(--sa-text-secondary); font-size: 13px; margin: 0 0 24px; }
+
+  section { margin: 40px 0; }
+  section h2 {
+    font-size: 14px; text-transform: uppercase; letter-spacing: .04em;
+    color: var(--sa-text-secondary); border-bottom: 1px solid var(--sa-border);
+    padding-bottom: 8px; margin-bottom: 16px;
+  }
+
+  /* theme toggle */
+  .sa-toggle {
+    position: fixed; top: 16px; right: 16px;
+    background: var(--sa-surface); border: 1px solid var(--sa-border);
+    color: var(--sa-text); border-radius: var(--sa-radius-md);
+    padding: 8px 14px; font-size: 13px; cursor: pointer;
+  }
+  /* [CORREÇÃO DE REFERÊNCIA] Todo :focus-visible neste arquivo (aqui e nos demais blocos)
+     é uma adição deliberada do reference.html, não uma reprodução de CSS observado na fonte
+     — a fonte não customiza foco visivelmente além do padrão do Quasar ([NÃO ESPECIFICADO]
+     em detalhe). Ver Seção 10a do DESIGN_SYSTEM.md. */
+  .sa-toggle:focus-visible { outline: 2px solid var(--sa-accent); outline-offset: 2px; }
+
+  /* ===== 1. paleta ===== */
+  .sa-swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--sa-space-md); }
+  .sa-swatch { border: 1px solid var(--sa-border); border-radius: var(--sa-radius-md); overflow: hidden; background: var(--sa-surface); }
+  .sa-swatch-color { height: 44px; }
+  .sa-swatch-label { padding: 6px 8px; font-size: 11px; font-family: ui-monospace, monospace; color: var(--sa-text-secondary); }
+
+  /* ===== 2. tipografia (semantic.typography) ===== */
+  .sa-text-title    { font-size: 18px; line-height: 26px; font-weight: 700; }
+  .sa-text-subtitle { font-size: 14px; line-height: 20px; font-weight: 600; }
+  .sa-text-label    { font-size: 12px; line-height: 16px; font-weight: 600; }
+  .sa-text-field    { font-size: 13px; line-height: 20px; font-weight: 400; }
+  .sa-text-table    { font-size: 12px; line-height: 18px; font-weight: 400; }
+  .sa-text-nav      { font-size: 13px; line-height: 18px; font-weight: 500; }
+  .sa-text-aux      { font-size: 11px; line-height: 16px; font-weight: 400; }
+  .sa-type-row { display: flex; align-items: baseline; gap: 12px; padding: 6px 0; border-bottom: 1px dashed var(--sa-border); }
+  .sa-type-role { width: 90px; font-family: ui-monospace, monospace; font-size: 11px; color: var(--sa-text-secondary); }
+
+  /* ===== 3. botões (component.button) ===== */
+  .sa-row { display: flex; align-items: center; gap: var(--sa-space-md); flex-wrap: wrap; }
+  .sa-btn {
+    font-family: inherit; border-radius: var(--sa-radius-md); border: 1px solid transparent;
+    cursor: pointer; background: var(--sa-primary); color: var(--sa-on-primary);
+  }
+  .sa-btn:focus-visible { outline: 2px solid var(--sa-accent); outline-offset: 2px; }
+  .sa-btn-sm { padding: 6px 10px; font-size: 12px; height: 28px; }
+  .sa-btn-md { padding: 8px 14px; font-size: 13px; height: 34px; }
+  .sa-btn-lg { padding: 12px 20px; font-size: 15px; height: 42px; }
+  .sa-btn-outline { background: transparent; color: var(--sa-primary); border-color: var(--sa-border); }
+
+  /* ===== 4. button group ===== */
+  .sa-btn-group { display: inline-flex; border-radius: var(--sa-radius-md); overflow: hidden; }
+  .sa-btn-group-item {
+    font-family: inherit; font-size: 13px; padding: 8px 14px; cursor: pointer;
+    border: 1px solid var(--sa-border); border-right-width: 0; background: var(--sa-surface); color: var(--sa-text);
+  }
+  .sa-btn-group-item:last-child { border-right-width: 1px; }
+  .sa-btn-group-item:focus-visible { outline: 2px solid var(--sa-accent); outline-offset: -2px; }
+  .sa-btn-group-primary .sa-btn-group-selected { background: var(--sa-primary); color: var(--sa-on-primary); font-weight: 600; border-color: var(--sa-primary); }
+  .sa-btn-group-secondary .sa-btn-group-selected { background: var(--sa-primary-soft-bg); color: var(--sa-primary); font-weight: 600; border-color: var(--sa-primary-soft-border); }
+  .sa-btn-group-ghost .sa-btn-group-selected { background: var(--sa-primary-soft-bg); color: var(--sa-primary); font-weight: 600; border-color: var(--sa-primary); }
+
+  /* ===== 5. badges ===== */
+  .sa-badge {
+    display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .03em; padding: 3px 10px; border-radius: var(--sa-radius-full);
+    border: 1px solid var(--sa-border); color: var(--sa-text-secondary);
+  }
+  .sa-badge-primary { background: var(--sa-primary-soft-bg); border-color: var(--sa-primary-soft-border); color: var(--sa-primary); }
+  .sa-badge-positive { background: #DCFCE7; border-color: #16A34A; color: #15803D; }
+  .sa-badge-warning { background: #FEF3C7; border-color: #D97706; color: #B45309; }
+  .sa-badge-negative { background: #FEE2E2; border-color: #DC2626; color: #B91C1C; }
+  html[data-theme="dark"] .sa-badge-positive { background: color-mix(in srgb, var(--sa-positive) 12%, transparent); border-color: color-mix(in srgb, var(--sa-positive) 30%, transparent); color: var(--sa-positive); }
+  html[data-theme="dark"] .sa-badge-warning { background: color-mix(in srgb, var(--sa-warning) 12%, transparent); border-color: color-mix(in srgb, var(--sa-warning) 30%, transparent); color: var(--sa-warning); }
+  html[data-theme="dark"] .sa-badge-negative { background: color-mix(in srgb, var(--sa-negative) 12%, transparent); border-color: color-mix(in srgb, var(--sa-negative) 30%, transparent); color: var(--sa-negative); }
+
+  /* ===== 6. stepper (5 estados) ===== */
+  .sa-stepper { display: flex; gap: 0; }
+  .sa-step-block { display: flex; align-items: center; }
+  .sa-step-circle {
+    width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; border: 2px solid var(--sa-border); color: var(--sa-text-secondary); background: var(--sa-surface);
+  }
+  .sa-step-active   { border-color: var(--sa-primary); color: var(--sa-primary); box-shadow: 0 0 0 4px color-mix(in srgb, var(--sa-shadow-primary) 15%, transparent); }
+  .sa-step-completed{ border-color: var(--sa-positive); background: var(--sa-positive); color: var(--sa-on-positive); }
+  .sa-step-warning  { border-color: var(--sa-warning); background: var(--sa-warning); color: var(--sa-on-warning); }
+  .sa-step-error    { border-color: var(--sa-negative); background: var(--sa-negative); color: var(--sa-on-negative); }
+  .sa-step-label { font-size: 12px; margin: 0 var(--sa-space-md) 0 8px; color: var(--sa-text-secondary); white-space: nowrap; }
+  .sa-step-connector { width: 40px; height: 2px; background: var(--sa-border); }
+  .sa-step-connector-done { background: var(--sa-positive); }
+
+  /* ===== 7. pagination ===== */
+  .sa-pagination { display: flex; gap: 6px; align-items: center; }
+  .sa-pagination-page {
+    min-width: 30px; height: 30px; border-radius: var(--sa-radius-md); border: 1px solid var(--sa-border);
+    background: var(--sa-surface); color: var(--sa-text); font-size: 13px; cursor: pointer;
+  }
+  .sa-pagination-page:focus-visible { outline: 2px solid var(--sa-accent); outline-offset: 2px; }
+  .sa-pagination-page-active { background: var(--sa-primary); border-color: var(--sa-primary); color: var(--sa-on-primary); font-weight: 700; }
+  .sa-pagination-compact { font-size: 12px; color: var(--sa-text-secondary); display: none; }
+  @media (max-width: 767px) {
+    .sa-pagination-numbered { display: none; }
+    .sa-pagination-compact { display: inline-flex; }
+  }
+
+  /* ===== 8. card + kpi ===== */
+  .sa-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--sa-space-md); }
+  .sa-card { background: var(--sa-surface); border: 1px solid var(--sa-border); border-radius: var(--sa-radius-lg); padding: var(--sa-space-lg); transition: border-color .15s, box-shadow .15s; }
+  .sa-card:hover { border-color: var(--sa-accent); box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08); }
+  .sa-kpi-value { font-size: 24px; font-weight: 700; margin: 4px 0; }
+  .sa-kpi-delta { font-size: 12px; display: flex; align-items: center; gap: 4px; }
+  .sa-kpi-positive { color: var(--sa-positive); }
+  .sa-kpi-negative { color: var(--sa-negative); }
+
+  /* ===== 9. icon-only + accessible name (correção de acessibilidade — ver Seção 10 do MD) ===== */
+  .sa-icon-btn {
+    position: relative; width: 34px; height: 34px; border-radius: var(--sa-radius-md);
+    border: 1px solid var(--sa-border); background: var(--sa-surface); color: var(--sa-text);
+    display: inline-flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px;
+  }
+  .sa-icon-btn:focus-visible, .sa-icon-btn:hover { border-color: var(--sa-accent); }
+  .sa-icon-btn:focus-visible { outline: 2px solid var(--sa-accent); outline-offset: 2px; }
+  /* tooltip visível (não depende só de aria-label/title) */
+  .sa-icon-btn .sa-tooltip {
+    position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+    background: var(--sa-text); color: var(--sa-surface); font-size: 11px; padding: 4px 8px;
+    border-radius: var(--sa-radius-sm); white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity .1s;
+  }
+  .sa-icon-btn:hover .sa-tooltip, .sa-icon-btn:focus-visible .sa-tooltip { opacity: 1; }
+
+  footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--sa-border); font-size: 11px; color: var(--sa-text-secondary); }
+
+  .sa-hint { font-size: 11px; color: var(--sa-text-secondary); margin: 0 0 12px; }
+  .sa-conceptual-tag { display:inline-block; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color: var(--sa-text-secondary); border:1px dashed var(--sa-border); border-radius: var(--sa-radius-sm); padding:2px 6px; margin-bottom:8px; }
+
+  /* ===== 10. tabs ===== */
+  .sa-tabs { display: flex; border-bottom: 1px solid var(--sa-border); gap: 4px; }
+  .sa-tab { background: none; border: none; border-bottom: 2px solid transparent; padding: 8px 12px; font-size: 13px; color: var(--sa-text-secondary); cursor: pointer; font-family: inherit; }
+  .sa-tab:focus-visible { outline: 2px solid var(--sa-accent); outline-offset: -2px; }
+  .sa-tab-active { color: var(--sa-primary); border-bottom-color: var(--sa-primary); font-weight: 600; }
+  .sa-tab-disabled { opacity: .45; cursor: not-allowed; }
+  .sa-tab-panel { padding: 12px 4px; font-size: 13px; }
+
+  /* ===== 11. accordion ===== */
+  .sa-accordion-item { border: 1px solid var(--sa-border); border-radius: var(--sa-radius-md); margin-bottom: 8px; overflow: hidden; background: var(--sa-surface); }
+  .sa-accordion-header { width: 100%; text-align: left; background: none; border: none; padding: 10px 12px; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: var(--sa-text); }
+  .sa-accordion-header:focus-visible { outline: 2px solid var(--sa-accent); outline-offset: -2px; }
+  .sa-accordion-header[aria-disabled="true"] { opacity: .5; cursor: not-allowed; }
+  .sa-accordion-icon { transition: transform .15s; }
+  .sa-accordion-header[aria-expanded="true"] .sa-accordion-icon { transform: rotate(180deg); }
+  .sa-accordion-body { padding: 0 12px 12px; font-size: 12px; color: var(--sa-text-secondary); }
+
+  /* ===== 12. modal ===== */
+  .sa-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: flex; align-items: center; justify-content: center; z-index: 50; }
+  .sa-modal-overlay[hidden] { display: none; }
+  .sa-modal-card { background: var(--sa-surface); border-radius: var(--sa-radius-lg); padding: var(--sa-space-lg); min-width: 300px; max-width: 90vw; }
+  .sa-modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+
+  /* ===== 13. drawer (confinado, igual à fonte) ===== */
+  /* demonstrativo, não token do Shared_Arch: altura/largura da caixa de preview e a duração
+     0.2s do slide (esta duração É [FONTE] — confirmada em drawer_demo.py; as dimensões da
+     caixa são só do exemplo, não existem como token) */
+  .sa-drawer-demo-box { position: relative; height: 200px; border: 1px solid var(--sa-border); border-radius: var(--sa-radius-md); overflow: hidden; background: var(--sa-surface); }
+  .sa-drawer-panel { position: absolute; top:0; right:0; bottom:0; width: 220px; background: var(--sa-surface-alt); border-left: 1px solid var(--sa-border); padding: var(--sa-space-md); transform: translateX(100%); transition: transform .2s ease; }
+  .sa-drawer-panel.sa-drawer-open { transform: translateX(0); }
+
+  /* ===== 14. popover ===== */
+  /* demonstrativo, não token do Shared_Arch: min-width e a sombra rgba(15,23,42,.12) são
+     valores locais só desta demo (a fonte não centraliza uma escala de sombra — ver Seção 4
+     do MD, "Shadows: NÃO ESPECIFICADO como token") */
+  .sa-popover-wrap { position: relative; display: inline-block; }
+  .sa-popover-panel { position: absolute; top: calc(100% + 6px); left: 0; background: var(--sa-surface); border: 1px solid var(--sa-border); border-radius: var(--sa-radius-md); min-width: 160px; box-shadow: 0 4px 14px rgba(15,23,42,.12); padding: 6px; display: none; z-index: 10; }
+  .sa-popover-panel.sa-popover-open { display: block; }
+  .sa-popover-item { display: block; width: 100%; text-align: left; background: none; border: none; padding: 8px; font-size: 13px; border-radius: var(--sa-radius-sm); cursor: pointer; color: var(--sa-text); font-family: inherit; }
+  .sa-popover-item:hover, .sa-popover-item:focus-visible { background: var(--sa-primary-soft-bg); }
+
+  /* ===== 15. toast ===== */
+  /* demonstrativo, não token do Shared_Arch: posição/tamanho da pilha e a sombra são só
+     desta demo; auto-dismiss de 2800ms (ver script) também é valor local, sem equivalente
+     documentado na fonte ([STACK-SPECIFIC] na fonte, que usa o Notify padrão do Quasar) */
+  .sa-toast-stack { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; gap: 8px; z-index: 60; }
+  .sa-toast { padding: 10px 16px; border-radius: var(--sa-radius-md); font-size: 13px; color: #fff; box-shadow: 0 4px 14px rgba(15,23,42,.2); }
+  .sa-toast-info { background: var(--sa-info); }
+  .sa-toast-positive { background: var(--sa-positive); }
+  .sa-toast-warning { background: var(--sa-warning); }
+  .sa-toast-negative { background: var(--sa-negative); }
+
+  /* ===== 16. command palette (simplificada) ===== */
+  /* demonstrativo, não token: 420px é só o exemplo (a fonte usa max-width 480px no diálogo
+     real do command_palette.py — valor próximo mas não igual, ambos locais/não-token) */
+  .sa-cmdk-card { background: var(--sa-surface); border-radius: var(--sa-radius-lg); width: 420px; max-width: 90vw; overflow: hidden; }
+  .sa-cmdk-input { width: 100%; border: none; border-bottom: 1px solid var(--sa-border); padding: 12px 14px; font-size: 14px; font-family: inherit; background: var(--sa-surface); color: var(--sa-text); }
+  .sa-cmdk-input:focus { outline: none; }
+  .sa-cmdk-list { max-height: 260px; overflow-y: auto; padding: 6px; }
+  .sa-cmdk-group { font-size: 10px; text-transform: uppercase; letter-spacing: .04em; color: var(--sa-text-secondary); padding: 8px 8px 2px; }
+  .sa-cmdk-item { padding: 8px; border-radius: var(--sa-radius-sm); font-size: 13px; cursor: pointer; display:flex; align-items:center; gap:8px; }
+  .sa-cmdk-item-active { background: var(--sa-primary-soft-bg); color: var(--sa-primary); }
+
+  /* ===== 17. form fields ===== */
+  .sa-field-row { display: flex; gap: var(--sa-space-md); flex-wrap: wrap; margin-bottom: var(--sa-space-md); }
+  .sa-field { flex: 1 1 200px; min-width: 200px; display: flex; flex-direction: column; gap: 4px; }
+  .sa-field label { font-size: 12px; font-weight: 600; color: var(--sa-text-secondary); }
+  .sa-field input, .sa-field textarea, .sa-field select { font-family: inherit; font-size: 13px; padding: 8px 10px; border-radius: var(--sa-radius-md); border: 1px solid var(--sa-border); background: var(--sa-surface); color: var(--sa-text); }
+  .sa-field input:disabled { opacity: .6; cursor: not-allowed; }
+  .sa-field input:focus-visible, .sa-field textarea:focus-visible, .sa-field select:focus-visible { outline: 2px solid var(--sa-accent); outline-offset: 1px; }
+  .sa-field-error input { border-color: var(--sa-negative); }
+  .sa-help-text { font-size: 11px; color: var(--sa-text-secondary); }
+  .sa-error-text { font-size: 11px; color: var(--sa-negative); }
+
+  /* ===== 18. table ===== */
+  .sa-table-wrap { overflow-x: auto; border: 1px solid var(--sa-border); border-radius: var(--sa-radius-md); }
+  table.sa-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .sa-table th { text-align: left; font-size: 11px; text-transform: uppercase; color: var(--sa-text-secondary); padding: 8px 12px; border-bottom: 1px solid var(--sa-border); background: var(--sa-surface-alt); }
+  .sa-table td { padding: 8px 12px; border-bottom: 1px solid var(--sa-border); }
+  .sa-table tbody tr:hover { background: var(--sa-surface-alt); }
+
+  /* ===== 19. app shell (miniatura) ===== */
+  /* demonstrativo, não token do Shared_Arch: todas as dimensões abaixo (altura da miniatura,
+     largura 140px/44px da sidebar de exemplo, transição de 0.15s) são só desta demo — a fonte
+     usa LAYOUT["header_height"]=48 (token real, ver tokens.json) e larguras de sidebar que são
+     CONSTANTES LOCAIS de sidebar.py, não tokens centralizados (ver Seção 12 do MD) */
+  .sa-shell-demo { border: 1px solid var(--sa-border); border-radius: var(--sa-radius-lg); overflow: hidden; height: 220px; display: flex; flex-direction: column; }
+  .sa-shell-header-demo { height: 36px; background: var(--sa-surface); border-bottom: 1px solid var(--sa-border); display: flex; align-items: center; gap: 8px; padding: 0 10px; font-size: 12px; flex-shrink: 0; }
+  .sa-shell-body-demo { flex: 1; display: flex; min-height: 0; }
+  .sa-shell-sidebar-demo { width: 140px; background: var(--sa-surface-alt); border-right: 1px solid var(--sa-border); padding: 8px; font-size: 11px; transition: width .15s; flex-shrink: 0; }
+  .sa-shell-sidebar-demo.sa-shell-sidebar-mini { width: 44px; }
+  .sa-shell-content-demo { flex: 1; padding: 12px; font-size: 12px; color: var(--sa-text-secondary); overflow: auto; }
+
+  /* ===== 20. split view ===== */
+  /* demonstrativo, não token do Shared_Arch: altura 120px e largura inicial 160px do painel A
+     são só desta demo — split_view.py/resize_handle.py na fonte também usam mín/máx/padrão em
+     px como CONSTANTES LOCAIS do componente, não tokens centralizados (mesma categoria, ver
+     Seção 12 do MD); os limites 90/320px usados no arraste (ver script) seguem esse mesmo padrão */
+  .sa-split-demo { display: flex; height: 120px; border: 1px solid var(--sa-border); border-radius: var(--sa-radius-md); overflow: hidden; }
+  .sa-split-pane-a { background: var(--sa-surface-alt); flex: 0 0 auto; width: 160px; padding: 8px; font-size: 11px; }
+  .sa-split-handle { width: 6px; background: var(--sa-border); cursor: col-resize; flex-shrink: 0; }
+  .sa-split-handle:hover, .sa-split-handle.sa-split-dragging { background: var(--sa-shadow-primary); }
+  .sa-split-pane-b { flex: 1 1 auto; background: var(--sa-surface); padding: 8px; font-size: 11px; }
+
+  /* ===== 21. progress / loading / empty / logs ===== */
+  .sa-progress-track { width: 100%; height: 8px; border-radius: var(--sa-radius-full); background: var(--sa-border); overflow: hidden; }
+  .sa-progress-fill { height: 100%; background: var(--sa-primary); border-radius: var(--sa-radius-full); }
+  /* demonstrativo, não token: raio 20px e duração 0.8s são só desta demo (motion não é
+     centralizado na fonte — ver Seção 4/8 do MD, "Motion: NÃO ESPECIFICADO como token") */
+  .sa-spinner { width: 20px; height: 20px; border: 2px solid var(--sa-border); border-top-color: var(--sa-primary); border-radius: 50%; animation: sa-spin 0.8s linear infinite; display: inline-block; }
+  @keyframes sa-spin { to { transform: rotate(360deg); } }
+  /* [RECOMENDAÇÃO] — não existe na fonte (nenhuma menção a prefers-reduced-motion no
+     Shared_Arch); adicionado aqui como demonstração da boa prática recomendada na Seção 8
+     do MD, não como reprodução de comportamento observado. Ver Seção 10a do MD. */
+  @media (prefers-reduced-motion: reduce) { .sa-spinner { animation-duration: 2s; } }
+  .sa-empty-demo { text-align: center; padding: 24px; color: var(--sa-text-secondary); }
+  .sa-empty-demo .material-icon-placeholder { font-size: 32px; opacity: .5; display:block; margin-bottom: 8px; }
+  .sa-console-demo { background: #0B1220; color: #C7D2FE; font-family: ui-monospace, monospace; font-size: 11px; padding: 10px; border-radius: var(--sa-radius-md); height: 110px; overflow-y: auto; }
+  .sa-console-line { padding: 1px 0; }
+  .sa-console-info { color: #94A3B8; }
+  .sa-console-warn { color: #FBBF24; }
+  .sa-console-error { color: #F87171; }
+
+  /* ===== 22. charts conceituais (nível C) ===== */
+  .sa-chart-demo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--sa-space-md); }
+  .sa-chart-box { border: 1px solid var(--sa-border); border-radius: var(--sa-radius-md); padding: var(--sa-space-md); background: var(--sa-surface); }
+  .sa-chart-box h3 { font-size: 12px; margin: 0 0 8px; color: var(--sa-text-secondary); }
+  .sa-donut { width: 90px; height: 90px; border-radius: 50%; margin: 0 auto; }
+  .sa-heatmap-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+  .sa-heatmap-cell { aspect-ratio: 1; border-radius: 2px; }
+  .sa-map-demo { position: relative; height: 140px; border-radius: var(--sa-radius-md); background: repeating-linear-gradient(45deg, var(--sa-surface-alt), var(--sa-surface-alt) 10px, var(--sa-surface) 10px, var(--sa-surface) 20px); border: 1px solid var(--sa-border); overflow: hidden; }
+  .sa-map-pin { position: absolute; width: 14px; height: 14px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); top: 40%; left: 45%; }
+</style>
+</head>
+<body>
+
+  <button class="sa-toggle" id="themeToggle" type="button" aria-pressed="false">🌗 Alternar tema</button>
+
+  <h1>Design System Reference</h1>
+  <p class="sa-lede">Ilustrativo, não normativo. Ver <code>DESIGN_SYSTEM.md</code> para a especificação. Valores idênticos a <code>tokens.json</code>. (Provenance histórica: extraído de "Shared_Arch", um projeto NiceGUI/Python — citado aqui só para rastreabilidade, não como requisito.)</p>
+
+  <section aria-labelledby="h-palette">
+    <h2 id="h-palette">1 · Paleta semântica (semantic.color)</h2>
+    <div class="sa-swatch-grid" id="paletteGrid"></div>
+  </section>
+
+  <section aria-labelledby="h-type">
+    <h2 id="h-type">2 · Tipografia (semantic.typography)</h2>
+    <div class="sa-type-row"><span class="sa-type-role">title</span><span class="sa-text-title">Título de seção</span></div>
+    <div class="sa-type-row"><span class="sa-type-role">subtitle</span><span class="sa-text-subtitle">Subtítulo</span></div>
+    <div class="sa-type-row"><span class="sa-type-role">field</span><span class="sa-text-field">Texto de campo/corpo</span></div>
+    <div class="sa-type-row"><span class="sa-type-role">table</span><span class="sa-text-table">Texto de tabela</span></div>
+    <div class="sa-type-row"><span class="sa-type-role">nav</span><span class="sa-text-nav">Item de navegação</span></div>
+    <div class="sa-type-row"><span class="sa-type-role">label</span><span class="sa-text-label">RÓTULO</span></div>
+    <div class="sa-type-row"><span class="sa-type-role">aux</span><span class="sa-text-aux">Texto auxiliar pequeno</span></div>
+  </section>
+
+  <section aria-labelledby="h-buttons">
+    <h2 id="h-buttons">3 · Botões (component.button)</h2>
+    <div class="sa-row">
+      <button class="sa-btn sa-btn-sm">Pequeno</button>
+      <button class="sa-btn sa-btn-md">Médio</button>
+      <button class="sa-btn sa-btn-lg">Grande</button>
+      <button class="sa-btn sa-btn-md sa-btn-outline">Outline</button>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-btngroup">
+    <h2 id="h-btngroup">4 · Button group (single/multi-select, 3 variantes)</h2>
+    <div class="sa-row" style="margin-bottom:12px;">
+      <div class="sa-btn-group sa-btn-group-primary" role="group" aria-label="Período">
+        <button class="sa-btn-group-item">Dia</button>
+        <button class="sa-btn-group-item sa-btn-group-selected" aria-pressed="true">Semana</button>
+        <button class="sa-btn-group-item">Mês</button>
+      </div>
+    </div>
+    <div class="sa-row" style="margin-bottom:12px;">
+      <div class="sa-btn-group sa-btn-group-secondary" role="group" aria-label="Formatação (múltipla escolha)">
+        <button class="sa-btn-group-item sa-btn-group-selected" aria-pressed="true">Negrito</button>
+        <button class="sa-btn-group-item">Itálico</button>
+        <button class="sa-btn-group-item sa-btn-group-selected" aria-pressed="true">Sublinhado</button>
+      </div>
+    </div>
+    <div class="sa-row">
+      <div class="sa-btn-group sa-btn-group-ghost" role="group" aria-label="Ação">
+        <button class="sa-btn-group-item sa-btn-group-selected" aria-pressed="true">Aprovar</button>
+        <button class="sa-btn-group-item">Rejeitar</button>
+        <button class="sa-btn-group-item">Arquivar</button>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-badges">
+    <h2 id="h-badges">5 · Badges (4 variantes + default)</h2>
+    <div class="sa-row">
+      <span class="sa-badge">Neutro</span>
+      <span class="sa-badge sa-badge-primary">Primário</span>
+      <span class="sa-badge sa-badge-positive">Ativo</span>
+      <span class="sa-badge sa-badge-warning">Manutenção</span>
+      <span class="sa-badge sa-badge-negative">Erro</span>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-stepper">
+    <h2 id="h-stepper">6 · Stepper (5 estados)</h2>
+    <div class="sa-stepper" style="margin-bottom:16px;">
+      <div class="sa-step-block">
+        <div class="sa-step-circle sa-step-completed">✓</div><span class="sa-step-label">Dados</span>
+        <div class="sa-step-connector sa-step-connector-done"></div>
+      </div>
+      <div class="sa-step-block">
+        <div class="sa-step-circle sa-step-active">2</div><span class="sa-step-label">Revisão</span>
+        <div class="sa-step-connector"></div>
+      </div>
+      <div class="sa-step-block">
+        <div class="sa-step-circle">3</div><span class="sa-step-label">Confirmação</span>
+      </div>
+    </div>
+    <p class="sa-text-aux">Legenda de estados isolados:</p>
+    <div class="sa-row">
+      <div class="sa-step-circle">1</div>
+      <div class="sa-step-circle sa-step-active">2</div>
+      <div class="sa-step-circle sa-step-completed">✓</div>
+      <div class="sa-step-circle sa-step-warning">!</div>
+      <div class="sa-step-circle sa-step-error">✕</div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-pagination">
+    <h2 id="h-pagination">7 · Paginação (numerada + modo compacto &lt;768px)</h2>
+    <nav class="sa-pagination sa-pagination-numbered" aria-label="Paginação">
+      <button class="sa-pagination-page" aria-label="Página anterior">‹</button>
+      <button class="sa-pagination-page">1</button>
+      <button class="sa-pagination-page sa-pagination-page-active" aria-current="page">2</button>
+      <button class="sa-pagination-page">3</button>
+      <span class="sa-text-aux">…</span>
+      <button class="sa-pagination-page">12</button>
+      <button class="sa-pagination-page" aria-label="Próxima página">›</button>
+    </nav>
+    <span class="sa-pagination-compact">Página 2 de 12</span>
+  </section>
+
+  <section aria-labelledby="h-cards">
+    <h2 id="h-cards">8 · Cards e KPI</h2>
+    <div class="sa-card-grid">
+      <div class="sa-card">
+        <div class="sa-text-label" style="color:var(--sa-text-secondary)">RECEITA</div>
+        <div class="sa-kpi-value">R$ 48.200</div>
+        <div class="sa-kpi-delta sa-kpi-positive">▲ 12% vs. mês anterior</div>
+      </div>
+      <div class="sa-card">
+        <div class="sa-text-label" style="color:var(--sa-text-secondary)">CHURN</div>
+        <div class="sa-kpi-value">3,1%</div>
+        <div class="sa-kpi-delta sa-kpi-negative">▼ 0,4pp vs. meta</div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-icons">
+    <h2 id="h-icons">9 · Controles icon-only (accessible name + tooltip visível)</h2>
+    <p class="sa-text-aux"><strong>[FONTE]</strong> A fonte usa <code>.tooltip()</code> do NiceGUI/Quasar (tooltip visual). <strong>[CORREÇÃO DE ACESSIBILIDADE]</strong> aqui todo icon-only também recebe <code>aria-label</code> real — não depende só do tooltip visual (<code>title</code>). Ver Seção 10a do DESIGN_SYSTEM.md.</p>
+    <div class="sa-row">
+      <button class="sa-icon-btn" aria-label="Mostrar ou ocultar painel lateral">
+        ☰<span class="sa-tooltip" role="tooltip">Mostrar/ocultar painel lateral</span>
+      </button>
+      <button class="sa-icon-btn" aria-label="Copiar nome do ícone">
+        ⧉<span class="sa-tooltip" role="tooltip">Copiar nome do ícone</span>
+      </button>
+      <button class="sa-icon-btn" aria-label="Fechar painel">
+        ✕<span class="sa-tooltip" role="tooltip">Fechar painel</span>
+      </button>
+      <button class="sa-icon-btn" aria-label="Abrir paleta de comandos, atalho Control mais K">
+        ⌘<span class="sa-tooltip" role="tooltip">Abrir paleta de comandos (Ctrl+K)</span>
+      </button>
+    </div>
+  </section>
+
+  <h1 class="sa-text-title" style="margin-top:48px;">Nível A — funcional e visual</h1>
+  <p class="sa-lede">Interação real, simples. Ver DESIGN_SYSTEM.md Seção 5 para o contrato completo de cada padrão.</p>
+
+  <section aria-labelledby="h-tabs">
+    <h2 id="h-tabs">10 · Tabs</h2>
+    <div class="sa-tabs" role="tablist" aria-label="Exemplo de tabs">
+      <button class="sa-tab sa-tab-active" role="tab" aria-selected="true" data-tab="resumo">Resumo</button>
+      <button class="sa-tab" role="tab" aria-selected="false" data-tab="detalhes">Detalhes</button>
+      <button class="sa-tab sa-tab-disabled" role="tab" aria-disabled="true" disabled>Desabilitada</button>
+    </div>
+    <div class="sa-tab-panel" id="tabPanel">Conteúdo do painel "Resumo".</div>
+  </section>
+
+  <section aria-labelledby="h-accordion">
+    <h2 id="h-accordion">11 · Accordion (disclosure)</h2>
+    <p class="sa-hint"><strong>[FONTE]</strong> No Shared_Arch original, o estado "desabilitado" do item "Indisponível" é <strong>só uma classe CSS</strong> — o item continuava tecnicamente clicável/expansível, sem bloqueio funcional real (ver Seção 12 do MD). <strong>[CORREÇÃO DE REFERÊNCIA]</strong> Aqui, o clique é deliberadamente bloqueado quando <code>aria-disabled="true"</code> — a aparência esmaecida é preservada, mas a falha de acessibilidade da fonte não é reproduzida. Ver Seção 10a do MD.</p>
+    <div class="sa-accordion-item">
+      <button class="sa-accordion-header" aria-expanded="true" data-acc="1">Especificações <span class="sa-accordion-icon">▾</span></button>
+      <div class="sa-accordion-body">Aberto por padrão. Conteúdo de exemplo.</div>
+    </div>
+    <div class="sa-accordion-item">
+      <button class="sa-accordion-header" aria-expanded="false" data-acc="2">Histórico de alterações <span class="sa-accordion-icon">▾</span></button>
+      <div class="sa-accordion-body" hidden>Fechado por padrão. Conteúdo de exemplo.</div>
+    </div>
+    <div class="sa-accordion-item">
+      <button class="sa-accordion-header" aria-expanded="false" aria-disabled="true" data-acc="3">Indisponível nesta versão <span class="sa-accordion-icon">▾</span></button>
+      <div class="sa-accordion-body" hidden>Não deveria abrir — ver ressalva de acessibilidade.</div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-modal">
+    <h2 id="h-modal">12 · Modal (dialog)</h2>
+    <p class="sa-hint">Usar quando a decisão interrompe legitimamente o fluxo — não para informação que caberia na própria página.</p>
+    <button class="sa-btn sa-btn-md" id="openModalBtn">Confirmar ação</button>
+    <div class="sa-modal-overlay" id="modalOverlay" hidden>
+      <div class="sa-modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div id="modalTitle" class="sa-text-subtitle">Remover componente?</div>
+        <p class="sa-text-field" style="color:var(--sa-text-secondary)">Esta ação não pode ser desfeita.</p>
+        <div class="sa-modal-actions">
+          <button class="sa-btn sa-btn-md sa-btn-outline" id="modalCancel">Cancelar</button>
+          <button class="sa-btn sa-btn-md" style="background:var(--sa-negative)" id="modalConfirm">Remover</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-drawer">
+    <h2 id="h-drawer">13 · Drawer (contextual, confinado à demo)</h2>
+    <p class="sa-hint">Preferível para inspeção/detalhe/filtros que coexistem com a página — não substitui o conteúdo principal.</p>
+    <div class="sa-drawer-demo-box">
+      <div style="padding:12px;">
+        <div class="sa-text-subtitle">Área de conteúdo</div>
+        <p class="sa-text-aux">O painel desliza da direita, confinado a esta caixa.</p>
+        <button class="sa-btn sa-btn-sm" id="openDrawerBtn">Abrir painel</button>
+      </div>
+      <div class="sa-drawer-panel" id="drawerPanel">
+        <div class="sa-row" style="justify-content:space-between;">
+          <strong class="sa-text-subtitle">Detalhes</strong>
+          <button class="sa-icon-btn" style="width:26px;height:26px;" aria-label="Fechar painel" id="closeDrawerBtn">✕</button>
+        </div>
+        <p class="sa-text-aux">Conteúdo contextual do item selecionado.</p>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-popover">
+    <h2 id="h-popover">14 · Popover / Flyout menu</h2>
+    <p class="sa-hint">Ações pequenas e locais — não deve virar uma tela escondida.</p>
+    <div class="sa-popover-wrap">
+      <button class="sa-btn sa-btn-md sa-btn-outline" id="popoverTrigger" aria-haspopup="true" aria-expanded="false">Ações ▾</button>
+      <div class="sa-popover-panel" id="popoverPanel" role="menu">
+        <button class="sa-popover-item" role="menuitem">Editar</button>
+        <button class="sa-popover-item" role="menuitem">Duplicar</button>
+        <button class="sa-popover-item" role="menuitem" style="color:var(--sa-negative)" title="Ação destrutiva — não pode ser desfeita">Excluir</button>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-toast">
+    <h2 id="h-toast">15 · Toast / Notificação</h2>
+    <div class="sa-row">
+      <button class="sa-btn sa-btn-sm" style="background:var(--sa-info)" data-toast="info">Info</button>
+      <button class="sa-btn sa-btn-sm" style="background:var(--sa-positive)" data-toast="positive">Sucesso</button>
+      <button class="sa-btn sa-btn-sm" style="background:var(--sa-warning)" data-toast="warning">Aviso</button>
+      <button class="sa-btn sa-btn-sm" style="background:var(--sa-negative)" data-toast="negative">Erro</button>
+    </div>
+    <div class="sa-toast-stack" id="toastStack"></div>
+  </section>
+
+  <section aria-labelledby="h-cmdk">
+    <h2 id="h-cmdk">16 · Command Palette (simplificada)</h2>
+    <p class="sa-hint"><strong>[FONTE]</strong> Atalho global, navegação circular por setas, Enter confirma, Esc fecha — reprodução fiel do contrato de <code>command_palette.py</code> (implementação simplificada, mesma técnica de resultado).</p>
+    <button class="sa-btn sa-btn-md sa-btn-outline" id="openCmdkBtn">🔎 Comandos <span style="opacity:.6">Ctrl+K</span></button>
+    <div class="sa-modal-overlay" id="cmdkOverlay" hidden style="align-items:flex-start; padding-top:10vh;">
+      <div class="sa-cmdk-card" role="dialog" aria-modal="true">
+        <input class="sa-cmdk-input" id="cmdkInput" placeholder="Digite um comando..." autocomplete="off" />
+        <div class="sa-cmdk-list" id="cmdkList"></div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-forms">
+    <h2 id="h-forms">17 · Formulário</h2>
+    <div class="sa-field-row">
+      <div class="sa-field"><label for="fName">Nome</label><input id="fName" value="Usuário Exemplo" /></div>
+      <div class="sa-field sa-field-error" id="emailField">
+        <label for="fEmail">E-mail</label>
+        <input id="fEmail" value="nao-e-um-email" />
+        <span class="sa-error-text" id="emailError">Informe um e-mail válido</span>
+      </div>
+    </div>
+    <div class="sa-field-row">
+      <div class="sa-field"><label for="fType">Tipo</label>
+        <select id="fType"><option>Componente</option><option>Página</option><option>Token</option></select>
+      </div>
+      <div class="sa-field"><label for="fDisabled">Campo desabilitado</label><input id="fDisabled" value="Somente leitura" disabled /></div>
+    </div>
+    <div class="sa-field"><label for="fNotes">Notas</label><textarea id="fNotes" rows="2">Texto de exemplo.</textarea></div>
+    <div class="sa-row" style="margin:12px 0;">
+      <label class="sa-text-field"><input type="checkbox" checked /> Notificar</label>
+      <label class="sa-text-field"><input type="radio" name="prio" /> Baixa</label>
+      <label class="sa-text-field"><input type="radio" name="prio" checked /> Média</label>
+    </div>
+    <button class="sa-btn sa-btn-md" id="submitFormBtn">Salvar</button>
+  </section>
+
+  <section aria-labelledby="h-table">
+    <h2 id="h-table">18 · Tabela</h2>
+    <p class="sa-hint">Ferramenta de inspeção — densidade legível, comparação entre linhas, não um "card disfarçado".</p>
+    <div class="sa-table-wrap">
+      <table class="sa-table">
+        <thead><tr><th>ID</th><th>Componente</th><th>Status</th><th>Atualizado</th></tr></thead>
+        <tbody>
+          <tr><td>01</td><td>Button Group</td><td><span class="sa-badge sa-badge-positive">Aprovado</span></td><td>2026-08-30</td></tr>
+          <tr><td>02</td><td>Command Palette</td><td><span class="sa-badge sa-badge-warning">Em revisão</span></td><td>2026-09-01</td></tr>
+          <tr><td>03</td><td>Split View</td><td>Pendente</td><td>2026-09-02</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <h1 class="sa-text-title" style="margin-top:48px;">Nível B — demonstração simplificada</h1>
+
+  <section aria-labelledby="h-shell">
+    <h2 id="h-shell">19 · App Shell (miniatura)</h2>
+    <div class="sa-shell-demo">
+      <div class="sa-shell-header-demo">
+        <button class="sa-icon-btn" style="width:24px;height:24px;font-size:12px;" aria-label="Mostrar ou ocultar painel lateral" id="shellSidebarToggle">☰</button>
+        <strong>App Name</strong>
+      </div>
+      <div class="sa-shell-body-demo">
+        <div class="sa-shell-sidebar-demo" id="shellSidebar">Foundation<br>Icons<br>Navigation<br>Forms</div>
+        <div class="sa-shell-content-demo">Área de conteúdo — largura máxima centralizada, sidebar colapsa para mini (ícones) ou recolhe totalmente.</div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-breadcrumb">
+    <h2 id="h-breadcrumb">20 · Breadcrumb (com colapso)</h2>
+    <nav class="sa-row" aria-label="breadcrumb" style="font-size:13px;">
+      <a href="#" style="color:var(--sa-text-secondary)">Galeria</a><span>›</span>
+      <span class="sa-popover-wrap"><button class="sa-icon-btn" style="width:24px;height:24px;" aria-label="Mostrar itens ocultos" id="breadcrumbMore">…</button>
+        <div class="sa-popover-panel" id="breadcrumbPanel"><button class="sa-popover-item">Navegação</button><button class="sa-popover-item">Overlays</button></div>
+      </span><span>›</span>
+      <a href="#" style="color:var(--sa-text-secondary)">Command Palette</a><span>›</span>
+      <span style="font-weight:600;">Detalhes</span>
+    </nav>
+  </section>
+
+  <section aria-labelledby="h-split">
+    <h2 id="h-split">21 · Split View + Resize Handle</h2>
+    <div class="sa-split-demo" id="splitDemo">
+      <div class="sa-split-pane-a" id="splitPaneA">Painel fixo (arraste →)</div>
+      <div class="sa-split-handle" id="splitHandle" role="separator" aria-orientation="vertical" aria-label="Redimensionar painéis" tabindex="0"></div>
+      <div class="sa-split-pane-b">Painel fluido — preenche o espaço restante.</div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-progress">
+    <h2 id="h-progress">22 · Progress, loading, empty state, logs</h2>
+    <div class="sa-row" style="margin-bottom:16px;">
+      <div style="flex:1;min-width:160px;"><span class="sa-text-aux">62%</span><div class="sa-progress-track"><div class="sa-progress-fill" style="width:62%"></div></div></div>
+      <span class="sa-spinner" aria-label="Carregando" role="status"></span>
+      <span class="sa-text-aux">Carregando dados...</span>
+    </div>
+    <div class="sa-card" style="margin-bottom:16px;">
+      <div class="sa-empty-demo">
+        <span class="material-icon-placeholder">▢</span>
+        <div class="sa-text-subtitle">Nenhum widget configurado</div>
+        <div class="sa-text-aux">Adicione um gráfico ou KPI para começar.</div>
+      </div>
+    </div>
+    <div class="sa-console-demo" id="consoleDemo">
+      <div class="sa-console-line sa-console-info">[10:02:11] build iniciado</div>
+      <div class="sa-console-line sa-console-info">[10:02:12] instalando dependências</div>
+      <div class="sa-console-line sa-console-warn">[10:02:15] aviso: versão desatualizada</div>
+      <div class="sa-console-line sa-console-error">[10:02:18] erro: falha simulada</div>
+    </div>
+  </section>
+
+  <h1 class="sa-text-title" style="margin-top:48px;">Nível C — representação conceitual</h1>
+  <p class="sa-lede">Aparência/contrato apenas — não é a biblioteca de gráfico/mapa real. Paleta vinda do domínio <code>component.chart</code>, separado de <code>semantic.color</code>.</p>
+
+  <section aria-labelledby="h-viz">
+    <h2 id="h-viz">23 · Data Visualization (conceitual)</h2>
+    <div class="sa-chart-demo-grid">
+      <div class="sa-chart-box"><span class="sa-conceptual-tag">conceitual</span><h3>Line</h3>
+        <svg viewBox="0 0 200 60" width="100%" height="60"><polyline points="0,45 30,30 60,35 90,15 120,25 150,10 180,20 200,5" fill="none" stroke="#2563EB" stroke-width="2"/></svg>
+      </div>
+      <div class="sa-chart-box"><span class="sa-conceptual-tag">conceitual</span><h3>Bar</h3>
+        <svg viewBox="0 0 200 60" width="100%" height="60">
+          <rect x="5" y="20" width="20" height="40" fill="#2563EB"/><rect x="35" y="10" width="20" height="50" fill="#7C3AED"/>
+          <rect x="65" y="30" width="20" height="30" fill="#0D9488"/><rect x="95" y="5" width="20" height="55" fill="#EA580C"/>
+          <rect x="125" y="25" width="20" height="35" fill="#DB2777"/><rect x="155" y="15" width="20" height="45" fill="#65A30D"/>
+        </svg>
+      </div>
+      <div class="sa-chart-box"><span class="sa-conceptual-tag">conceitual</span><h3>Area</h3>
+        <svg viewBox="0 0 200 60" width="100%" height="60"><polygon points="0,60 0,40 40,30 80,42 120,20 160,28 200,10 200,60" fill="#2563EB" opacity=".25"/><polyline points="0,40 40,30 80,42 120,20 160,28 200,10" fill="none" stroke="#2563EB" stroke-width="2"/></svg>
+      </div>
+      <div class="sa-chart-box"><span class="sa-conceptual-tag">conceitual</span><h3>Donut</h3>
+        <div class="sa-donut" style="background: conic-gradient(#2563EB 0 40%, #7C3AED 40% 65%, #0D9488 65% 85%, #EA580C 85% 100%);"></div>
+      </div>
+      <div class="sa-chart-box"><span class="sa-conceptual-tag">conceitual</span><h3>Sparkline</h3>
+        <svg viewBox="0 0 100 24" width="100%" height="24"><polyline points="0,18 15,12 30,15 45,6 60,10 75,3 100,8" fill="none" stroke="#16A34A" stroke-width="1.5"/></svg>
+      </div>
+      <div class="sa-chart-box"><span class="sa-conceptual-tag">conceitual</span><h3>Heatmap</h3>
+        <div class="sa-heatmap-grid" id="heatmapDemo"></div>
+      </div>
+    </div>
+    <div class="sa-chart-box" style="margin-top:12px;">
+      <span class="sa-conceptual-tag">conceitual — não é Leaflet real</span><h3>Mapa (marcador selecionado)</h3>
+      <div class="sa-map-demo"><div class="sa-map-pin" style="background:var(--sa-map-selected)"></div></div>
+      <p class="sa-text-aux">Contrato portável: marcador, marcador selecionado com destaque, popup de detalhe. A técnica exata (filtro CSS sobre PNG do Leaflet) não é portável — ver <code>component.map</code> em tokens.json.</p>
+    </div>
+  </section>
+
+  <footer>
+    Gerado a partir de <code>tokens.json</code>. Documento normativo: <code>DESIGN_SYSTEM.md</code>. Provenance histórica: "Shared_Arch" (NiceGUI/Python) — ver Seção 13 do DESIGN_SYSTEM.md.
+  </footer>
+
+<script>
+  // Paleta: gera swatches a partir das mesmas 21 chaves de tokens.json (light values, refletidas via CSS var).
+  var COLOR_KEYS = [
+    "bg","surface","surface-alt","border","text","text-secondary",
+    "primary","primary-dark","primary-soft-bg","primary-soft-border","accent",
+    "positive","warning","negative","info",
+    "on-primary","on-positive","on-warning","on-negative",
+    "shadow-primary","map-selected","export-bg"
+  ];
+  var grid = document.getElementById("paletteGrid");
+  COLOR_KEYS.forEach(function (key) {
+    var cell = document.createElement("div");
+    cell.className = "sa-swatch";
+    var swatch = document.createElement("div");
+    swatch.className = "sa-swatch-color";
+    swatch.style.background = "var(--sa-" + key + ")";
+    if (key.indexOf("on-") === 0 || key === "export-bg") {
+      swatch.style.border = "1px solid var(--sa-border)";
+    }
+    var label = document.createElement("div");
+    label.className = "sa-swatch-label";
+    label.textContent = "--sa-" + key;
+    cell.appendChild(swatch);
+    cell.appendChild(label);
+    grid.appendChild(cell);
+  });
+
+  // Toggle de tema — vanilla JS, sem dependência.
+  var toggleBtn = document.getElementById("themeToggle");
+  var root = document.documentElement;
+  toggleBtn.addEventListener("click", function () {
+    var isDark = root.getAttribute("data-theme") === "dark";
+    root.setAttribute("data-theme", isDark ? "light" : "dark");
+    toggleBtn.setAttribute("aria-pressed", String(!isDark));
+  });
+
+  // ---- 10. Tabs ----
+  var tabPanelText = { resumo: "Conteúdo do painel \"Resumo\".", detalhes: "Conteúdo do painel \"Detalhes\"." };
+  document.querySelectorAll(".sa-tab:not(.sa-tab-disabled)").forEach(function (tab) {
+    tab.addEventListener("click", function () {
+      document.querySelectorAll(".sa-tab").forEach(function (t) { t.classList.remove("sa-tab-active"); t.setAttribute("aria-selected", "false"); });
+      tab.classList.add("sa-tab-active"); tab.setAttribute("aria-selected", "true");
+      document.getElementById("tabPanel").textContent = tabPanelText[tab.dataset.tab] || "";
+    });
+  });
+
+  // ---- 11. Accordion ----
+  document.querySelectorAll(".sa-accordion-header").forEach(function (header) {
+    header.addEventListener("click", function () {
+      if (header.getAttribute("aria-disabled") === "true") return; // funcionalmente bloqueado aqui (correção vs. a fonte — ver Seção 12 do MD)
+      var expanded = header.getAttribute("aria-expanded") === "true";
+      header.setAttribute("aria-expanded", String(!expanded));
+      var body = header.nextElementSibling;
+      body.hidden = expanded;
+    });
+  });
+
+  // ---- 12. Modal ----
+  var modalOverlay = document.getElementById("modalOverlay");
+  document.getElementById("openModalBtn").addEventListener("click", function () { modalOverlay.hidden = false; });
+  document.getElementById("modalCancel").addEventListener("click", function () { modalOverlay.hidden = true; });
+  document.getElementById("modalConfirm").addEventListener("click", function () { modalOverlay.hidden = true; showToast("positive", "Removido (simulado)."); });
+  modalOverlay.addEventListener("click", function (e) { if (e.target === modalOverlay) modalOverlay.hidden = true; });
+
+  // ---- 13. Drawer confinado ----
+  var drawerPanel = document.getElementById("drawerPanel");
+  document.getElementById("openDrawerBtn").addEventListener("click", function () { drawerPanel.classList.add("sa-drawer-open"); });
+  document.getElementById("closeDrawerBtn").addEventListener("click", function () { drawerPanel.classList.remove("sa-drawer-open"); });
+
+  // ---- 14. Popover / flyout ----
+  function setupPopover(triggerId, panelId) {
+    var trigger = document.getElementById(triggerId), panel = document.getElementById(panelId);
+    trigger.addEventListener("click", function (e) {
+      e.stopPropagation();
+      var open = panel.classList.toggle("sa-popover-open");
+      trigger.setAttribute("aria-expanded", String(open));
+    });
+    panel.querySelectorAll(".sa-popover-item").forEach(function (item) {
+      item.addEventListener("click", function () { panel.classList.remove("sa-popover-open"); });
+    });
+  }
+  setupPopover("popoverTrigger", "popoverPanel");
+  setupPopover("breadcrumbMore", "breadcrumbPanel");
+  document.addEventListener("click", function () {
+    document.querySelectorAll(".sa-popover-panel").forEach(function (p) { p.classList.remove("sa-popover-open"); });
+  });
+
+  // ---- 15. Toast ----
+  function showToast(type, text) {
+    var stack = document.getElementById("toastStack");
+    var el = document.createElement("div");
+    el.className = "sa-toast sa-toast-" + type;
+    el.textContent = text;
+    stack.appendChild(el);
+    setTimeout(function () { el.remove(); }, 2800);
+  }
+  document.querySelectorAll("[data-toast]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var msgs = { info: "Informação de exemplo.", positive: "Ação concluída com sucesso.", warning: "Atenção: verifique os dados.", negative: "Falha ao processar (simulado)." };
+      showToast(btn.dataset.toast, msgs[btn.dataset.toast]);
+    });
+  });
+
+  // ---- 16. Command palette simplificada ----
+  var CMDK_COMMANDS = [
+    { group: "Navegação", label: "Ir para Foundation" },
+    { group: "Navegação", label: "Ir para Overlays" },
+    { group: "Ações", label: "Aprovar componente" },
+    { group: "Ações", label: "Criar novo token" },
+    { group: "Tema", label: "Alternar tema (use o botão no topo)" }
+  ];
+  var cmdkOverlay = document.getElementById("cmdkOverlay");
+  var cmdkInput = document.getElementById("cmdkInput");
+  var cmdkList = document.getElementById("cmdkList");
+  var cmdkState = { query: "", highlight: 0, filtered: CMDK_COMMANDS.slice() };
+
+  function renderCmdk() {
+    cmdkList.innerHTML = "";
+    if (cmdkState.filtered.length === 0) {
+      cmdkList.innerHTML = '<div class="sa-cmdk-item" style="cursor:default;">Nenhum comando encontrado.</div>';
+      return;
+    }
+    var lastGroup = null;
+    cmdkState.filtered.forEach(function (cmd, i) {
+      if (cmd.group !== lastGroup) {
+        var g = document.createElement("div"); g.className = "sa-cmdk-group"; g.textContent = cmd.group; cmdkList.appendChild(g);
+        lastGroup = cmd.group;
+      }
+      var item = document.createElement("div");
+      item.className = "sa-cmdk-item" + (i === cmdkState.highlight ? " sa-cmdk-item-active" : "");
+      item.textContent = cmd.label;
+      item.addEventListener("click", function () { runCmd(cmd); });
+      cmdkList.appendChild(item);
+    });
+  }
+  function filterCmdk() {
+    var q = cmdkState.query.toLowerCase();
+    cmdkState.filtered = CMDK_COMMANDS.filter(function (c) { return c.label.toLowerCase().indexOf(q) !== -1 || c.group.toLowerCase().indexOf(q) !== -1; });
+    cmdkState.highlight = 0;
+    renderCmdk();
+  }
+  function runCmd(cmd) { closeCmdk(); showToast("info", "Executado: " + cmd.label); }
+  function openCmdk() { cmdkOverlay.hidden = false; cmdkInput.value = ""; cmdkState.query = ""; filterCmdk(); cmdkInput.focus(); }
+  function closeCmdk() { cmdkOverlay.hidden = true; }
+  document.getElementById("openCmdkBtn").addEventListener("click", openCmdk);
+  cmdkOverlay.addEventListener("click", function (e) { if (e.target === cmdkOverlay) closeCmdk(); });
+  cmdkInput.addEventListener("input", function () { cmdkState.query = cmdkInput.value; filterCmdk(); });
+  document.addEventListener("keydown", function (e) {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); openCmdk(); }
+    if (!cmdkOverlay.hidden) {
+      if (e.key === "Escape") closeCmdk();
+      if (e.key === "ArrowDown") { e.preventDefault(); cmdkState.highlight = (cmdkState.highlight + 1) % Math.max(cmdkState.filtered.length, 1); renderCmdk(); }
+      if (e.key === "ArrowUp") { e.preventDefault(); cmdkState.highlight = (cmdkState.highlight - 1 + cmdkState.filtered.length) % Math.max(cmdkState.filtered.length, 1); renderCmdk(); }
+      if (e.key === "Enter" && cmdkState.filtered[cmdkState.highlight]) { runCmd(cmdkState.filtered[cmdkState.highlight]); }
+    }
+  });
+
+  // ---- 17. Form: validação de e-mail + submit com loading ----
+  var emailInput = document.getElementById("fEmail");
+  function validateEmail() {
+    var valid = emailInput.value.indexOf("@") !== -1;
+    document.getElementById("emailField").classList.toggle("sa-field-error", !valid);
+    document.getElementById("emailError").style.visibility = valid ? "hidden" : "visible";
+  }
+  emailInput.addEventListener("input", validateEmail);
+  validateEmail();
+  document.getElementById("submitFormBtn").addEventListener("click", function () {
+    var btn = this;
+    btn.disabled = true; btn.textContent = "Enviando...";
+    setTimeout(function () { btn.disabled = false; btn.textContent = "Salvar"; showToast("positive", "Formulário salvo (simulado)."); }, 1000);
+  });
+
+  // ---- 19. Shell sidebar mini toggle ----
+  document.getElementById("shellSidebarToggle").addEventListener("click", function () {
+    document.getElementById("shellSidebar").classList.toggle("sa-shell-sidebar-mini");
+  });
+
+  // ---- 21. Split view drag ----
+  (function () {
+    var handle = document.getElementById("splitHandle"), paneA = document.getElementById("splitPaneA");
+    var dragging = false, startX = 0, startW = 0;
+    function onMove(e) {
+      if (!dragging) return;
+      var x = e.touches ? e.touches[0].clientX : e.clientX;
+      var w = Math.min(320, Math.max(90, startW + (x - startX)));
+      paneA.style.width = w + "px";
+    }
+    function onUp() { dragging = false; handle.classList.remove("sa-split-dragging"); document.body.style.userSelect = ""; }
+    handle.addEventListener("pointerdown", function (e) {
+      dragging = true; startX = e.clientX; startW = paneA.getBoundingClientRect().width;
+      handle.classList.add("sa-split-dragging"); document.body.style.userSelect = "none";
+    });
+    handle.addEventListener("dblclick", function () { paneA.style.width = "160px"; });
+    document.addEventListener("pointermove", onMove);
+    document.addEventListener("pointerup", onUp);
+    handle.addEventListener("keydown", function (e) {
+      var w = paneA.getBoundingClientRect().width;
+      if (e.key === "ArrowLeft") paneA.style.width = Math.max(90, w - 10) + "px";
+      if (e.key === "ArrowRight") paneA.style.width = Math.min(320, w + 10) + "px";
+    });
+  })();
+
+  // ---- 23. Heatmap conceitual — usa component.chart.light.heatmapScale (tokens.json) ----
+  (function () {
+    var scale = ["#EFF4FF", "#93C5FD", "#2563EB", "#152A63"]; // valor demonstrativo, copiado de tokens.json component.chart.light.heatmapScale — não é um token novo
+    var grid = document.getElementById("heatmapDemo");
+    for (var i = 0; i < 28; i++) {
+      var cell = document.createElement("div");
+      cell.className = "sa-heatmap-cell";
+      cell.style.background = scale[Math.floor(Math.random() * scale.length)];
+      grid.appendChild(cell);
+    }
+  })();
+</script>
+</body>
+</html>
