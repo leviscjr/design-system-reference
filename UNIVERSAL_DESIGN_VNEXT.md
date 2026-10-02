@@ -117,7 +117,11 @@ Testar pelo menos larguras representativas entre 320 e 1920 px, reduced-motion e
 5. Preservar CSS CSP-compatible e JS sem `unsafe-eval` quando o consumidor assim exigir.
 6. Manter paridade de intenção nos temas light/dark se um consumidor oferecer ambos; não obrigar novo tema em uma implantação ainda em acabamento.
 
-## 10. Checklist de conformidade V2
+## 10. Vocabulário de referência
+
+Usar a gramática universal `Região.Componente.Subcomponente` para citar áreas, comportamentos e subcomponentes em briefs, testes e documentação. A lista concreta e os exemplos estão em [`UI_VOCABULARY.md`](./UI_VOCABULARY.md). O léxico não é uma obrigação de espelhar nomes no DOM, nem afirma que cada componente opcional já está implantado.
+
+## 11. Checklist de conformidade V2
 
 - [ ] Cores de domínio separadas de condição operacional e maturidade.
 - [ ] Densidade não reduz tipografia ou alvo interativo de forma indevida.
