@@ -97,7 +97,11 @@ Universal: contrato de drawer contextual, badge com fonte verificável, disclosu
 
 Específico do LC Hub: nomes A1/E2.1, layout da Home, utilidade da rail, categorias Aplicações/Capacidades, defaults 1/3/5/Todas, PPCs 008/019/020/021 e endpoints. Não propagar esses nomes/defaults para outros consumidores automaticamente.
 
-## 9. Protocolo de adoção
+## 9. Referências de interface em prompts e testes
+
+Adotar [`UI_VOCABULARY.md`](../UI_VOCABULARY.md) como dicionário de regiões e subcomponentes; para mudanças use a menor referência que identifique univocamente a área, por exemplo `Explorer.Tree.ItemLabel`, `Workspace.Apps.Toggle`, `Workspace.Feed.Density`, `Rail.Attention.Badge` e `Topbar.Status.E2`. As decisões deste perfil continuam responsáveis pelos defaults (Apps e Caps expandidos, Feed inicial = 1). Elementos previstos não devem ser declarados implantados só porque constam no vocabulário.
+
+## 10. Protocolo de adoção
 
 1. Consultar `DESIGN_SYSTEM.md` (fatos e princípios extraídos), `tokens.json` (valores extraídos), `UNIVERSAL_DESIGN_VNEXT.md` (novos padrões) e este perfil (escolhas LC Hub).
 2. Levantar implementação existente, sem reescrever componentes aprovados.
