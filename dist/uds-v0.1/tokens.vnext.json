@@ -1,0 +1,265 @@
+{
+  "$schema_note": "Extensão universal vNext (UNIVERSAL_DESIGN_VNEXT.md §2). Papéis semânticos sobre a extração de tokens.json, que permanece intocada. Valores '{sa.<chave>}' referenciam a extração; literais são valores NOVOS com status em 'provenance'. Gere o CSS com `python tools/uds_tokens.py build`.",
+  "meta": {
+    "extends": "tokens.json",
+    "version": "0.1.0",
+    "date": "2026-11-02",
+    "status": "candidate",
+    "statusNote": "Papéis = contrato vNext normativo. Valores literais novos = CANDIDATOS até homologação visual humana (vNext §2). Derivados ({sa.*}) herdam o status FATO da extração.",
+    "cssPrefix": "--uds-"
+  },
+  "provenance": {
+    "derived": "valor é referência literal a tokens.json (FATO da extração)",
+    "candidate": "valor novo desta extensão; exige homologação",
+    "fixed": "convenção técnica sem escolha estética (ex.: alvo de toque, backdrop)",
+    "roles": {
+      "text.muted": "candidate — sa.text-secondary já existe; muted escurecido para atingir 4.5:1 sobre surface.page (o #94A3B8 do hub fica abaixo de AA)",
+      "border.interactive": "candidate — sa.border (#E2E8F0) tem ~1.2:1; limite de controle exige >= 3:1 (WCAG 1.4.11)",
+      "status.unknown": "candidate — estado desconhecido neutro, distinto de healthy/empty (vNext invariante 6)",
+      "status.*.text": "candidate — variante de texto com 4.5:1; o preenchimento de status mantém a cor extraída",
+      "status.critical.bg": "candidate — fundo tonal de alerta de erro",
+      "maturity.*": "candidate — vNext exige não reutilizar nomes de status operacional",
+      "action.danger*": "candidate — branco sobre sa.negative (#DC2626) = 4.83; #B91C1C = 6.47 com margem para hover",
+      "action.primary*": "candidate (dark) — sa.primary dark (#6D8CFF) com texto branco = 3.0, abaixo de AA",
+      "surface.raised": "candidate (dark) — elevação perceptível sobre sa.surface",
+      "surface.hover": "candidate (dark) — sa.surface-alt (#0F172A) é mais escuro que o card",
+      "link-hover": "candidate (dark)",
+      "shadow.*": "candidate",
+      "backdrop": "fixed — sobreposição de overlay",
+      "motion.*": "candidate — faixas de estudo do vNext §2, ainda não homologadas",
+      "control.touch-min": "fixed — alvo mínimo para ponteiro grosso"
+    }
+  },
+  "scalars": {
+    "font.family": "-apple-system, \"Segoe UI\", system-ui, Roboto, \"Helvetica Neue\", Arial, sans-serif",
+    "font.family-mono": "ui-monospace, \"SFMono-Regular\", Menlo, Consolas, monospace",
+    "motion.fast": "140ms",
+    "motion.normal": "200ms",
+    "motion.panel": "240ms",
+    "motion.easing": "cubic-bezier(0.2, 0, 0, 1)",
+    "control.touch-min": "44px",
+    "focus.ring-width": "2px",
+    "focus.ring-offset": "2px",
+    "border.width": "1px",
+    "drawer.width": "360px",
+    "explorer.width": "264px",
+    "space.compact": "{uds.space.sm}",
+    "space.comfortable": "{uds.space.md}"
+  },
+  "themes": {
+    "light": {
+      "surface.page": "{sa.bg}",
+      "surface.card": "{sa.surface}",
+      "surface.raised": "{sa.surface}",
+      "surface.hover": "{sa.surface-alt}",
+      "surface.selected": "{sa.primary-soft-bg}",
+      "surface.selected-border": "{sa.primary-soft-border}",
+      "text.primary": "{sa.text}",
+      "text.secondary": "{sa.text-secondary}",
+      "text.muted": "#5B6A80",
+      "text.on-action": "{sa.on-primary}",
+      "border.default": "{sa.border}",
+      "border.interactive": "#8391A7",
+      "border.focus": "{sa.shadow-primary}",
+      "action.primary": "{sa.primary}",
+      "action.primary-hover": "{sa.primary-dark}",
+      "action.danger": "#B91C1C",
+      "action.danger-hover": "#991B1B",
+      "link": "{sa.accent}",
+      "link-hover": "{sa.primary}",
+      "accent.domain.default": "{sa.accent}",
+      "status.healthy": "{sa.positive}",
+      "status.warning": "{sa.warning}",
+      "status.critical": "{sa.negative}",
+      "status.unknown": "#64748B",
+      "status.healthy.text": "#15803D",
+      "status.warning.text": "#B45309",
+      "status.critical.text": "#B91C1C",
+      "status.unknown.text": "#5B6A80",
+      "status.critical.bg": "#FEF2F2",
+      "maturity.planned": "#64748B",
+      "maturity.partial": "#7C3AED",
+      "maturity.complete": "#0D9488",
+      "backdrop": "rgba(15, 23, 42, 0.45)",
+      "shadow.raised": "0 1px 2px rgba(15, 23, 42, 0.06), 0 4px 12px rgba(15, 23, 42, 0.08)",
+      "shadow.overlay": "0 12px 32px rgba(15, 23, 42, 0.18)"
+    },
+    "dark": {
+      "surface.page": "{sa.bg}",
+      "surface.card": "{sa.surface}",
+      "surface.raised": "#162033",
+      "surface.hover": "#1A2436",
+      "surface.selected": "{sa.primary-soft-bg}",
+      "surface.selected-border": "{sa.primary-soft-border}",
+      "text.primary": "{sa.text}",
+      "text.secondary": "{sa.text-secondary}",
+      "text.muted": "#8C9AB0",
+      "text.on-action": "{sa.on-primary}",
+      "border.default": "{sa.border}",
+      "border.interactive": "#5F6F87",
+      "border.focus": "{sa.shadow-primary}",
+      "action.primary": "#3B5BDB",
+      "action.primary-hover": "#2F4BC0",
+      "action.danger": "#B91C1C",
+      "action.danger-hover": "#DC2626",
+      "link": "{sa.accent}",
+      "link-hover": "#93C5FD",
+      "accent.domain.default": "{sa.accent}",
+      "status.healthy": "{sa.positive}",
+      "status.warning": "{sa.warning}",
+      "status.critical": "{sa.negative}",
+      "status.unknown": "#94A3B8",
+      "status.healthy.text": "{sa.positive}",
+      "status.warning.text": "{sa.warning}",
+      "status.critical.text": "{sa.negative}",
+      "status.unknown.text": "#94A3B8",
+      "status.critical.bg": "rgba(248, 113, 113, 0.12)",
+      "maturity.planned": "#94A3B8",
+      "maturity.partial": "#A78BFA",
+      "maturity.complete": "#2DD4BF",
+      "backdrop": "rgba(0, 0, 0, 0.6)",
+      "shadow.raised": "0 1px 2px rgba(0, 0, 0, 0.4)",
+      "shadow.overlay": "0 12px 32px rgba(0, 0, 0, 0.5)"
+    }
+  },
+  "contrastPairs": [
+    {
+      "fg": "text.primary",
+      "bg": "surface.card",
+      "min": 4.5,
+      "use": "texto comum"
+    },
+    {
+      "fg": "text.primary",
+      "bg": "surface.page",
+      "min": 4.5,
+      "use": "texto comum na página"
+    },
+    {
+      "fg": "text.secondary",
+      "bg": "surface.card",
+      "min": 4.5,
+      "use": "texto secundário"
+    },
+    {
+      "fg": "text.secondary",
+      "bg": "surface.page",
+      "min": 4.5,
+      "use": "texto secundário na página"
+    },
+    {
+      "fg": "text.muted",
+      "bg": "surface.card",
+      "min": 4.5,
+      "use": "metadado"
+    },
+    {
+      "fg": "text.muted",
+      "bg": "surface.page",
+      "min": 4.5,
+      "use": "metadado na página"
+    },
+    {
+      "fg": "text.primary",
+      "bg": "surface.selected",
+      "min": 4.5,
+      "use": "item selecionado"
+    },
+    {
+      "fg": "text.on-action",
+      "bg": "action.primary",
+      "min": 4.5,
+      "use": "botão primário"
+    },
+    {
+      "fg": "text.on-action",
+      "bg": "action.primary-hover",
+      "min": 4.5,
+      "use": "botão primário hover"
+    },
+    {
+      "fg": "text.on-action",
+      "bg": "action.danger",
+      "min": 4.5,
+      "use": "botão destrutivo"
+    },
+    {
+      "fg": "link",
+      "bg": "surface.card",
+      "min": 4.5,
+      "use": "link"
+    },
+    {
+      "fg": "link",
+      "bg": "surface.page",
+      "min": 4.5,
+      "use": "link na página"
+    },
+    {
+      "fg": "border.interactive",
+      "bg": "surface.card",
+      "min": 3.0,
+      "use": "limite de campo (1.4.11)"
+    },
+    {
+      "fg": "border.focus",
+      "bg": "surface.card",
+      "min": 3.0,
+      "use": "anel de foco"
+    },
+    {
+      "fg": "border.focus",
+      "bg": "surface.page",
+      "min": 3.0,
+      "use": "anel de foco na página"
+    },
+    {
+      "fg": "status.critical.text",
+      "bg": "surface.card",
+      "min": 4.5,
+      "use": "mensagem de validação"
+    },
+    {
+      "fg": "status.critical.text",
+      "bg": "status.critical.bg",
+      "min": 4.5,
+      "use": "alerta de erro"
+    },
+    {
+      "fg": "status.healthy.text",
+      "bg": "surface.card",
+      "min": 4.5,
+      "use": "texto de sucesso"
+    },
+    {
+      "fg": "status.warning.text",
+      "bg": "surface.card",
+      "min": 4.5,
+      "use": "texto de aviso"
+    },
+    {
+      "fg": "status.unknown.text",
+      "bg": "surface.card",
+      "min": 4.5,
+      "use": "texto de estado desconhecido"
+    },
+    {
+      "fg": "status.healthy",
+      "bg": "surface.card",
+      "min": 3.0,
+      "use": "ícone/indicador de status"
+    },
+    {
+      "fg": "status.critical",
+      "bg": "surface.card",
+      "min": 3.0,
+      "use": "ícone/borda de erro"
+    },
+    {
+      "fg": "status.unknown",
+      "bg": "surface.card",
+      "min": 3.0,
+      "use": "indicador desconhecido"
+    }
+  ]
+}

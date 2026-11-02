@@ -1,6 +1,6 @@
-# Perfil de produto — LC Hub / Visual System V2
+# Perfil histórico de produto — LC Hub / Visual System V2
 
-> 2026-10-02. Este é um **perfil consumidor** de `UNIVERSAL_DESIGN_VNEXT.md`; não é um novo design system universal nem uma descrição factual do Shared_Arch. Decisões abaixo foram consolidadas em conversas e testes humanos do LC Hub. **Aprovado** indica preferência/contrato humano; não prova que todo item foi implementado em produção. **Pendente visual** exige confirmação humana.
+> 2026-10-02. Registro histórico preservado de decisões do consumidor; não é fonte operacional nem um novo design system universal. Qualquer perfil operacional, tema Keycloak ou identidade LC-HUB pertence ao P2H e não é mantido neste repositório. **Aprovado** indica preferência/contrato humano; não prova implementação em produção. **Pendente visual** exige confirmação humana.
 
 ## 1. Intenção de produto
 

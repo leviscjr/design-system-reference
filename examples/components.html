@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>UDS — Componentes v0.1</title>
+  <link rel="stylesheet" href="../css/uds.tokens.css">
+  <link rel="stylesheet" href="../css/uds.components.css">
+  <link rel="stylesheet" href="demo.css">
+  <script src="../js/uds.js" defer></script>
+</head>
+<body class="uds-root">
+  <a class="uds-skip" href="#workspace">Ir para o conteúdo</a>
+
+  <div class="uds-shell">
+    <header class="uds-topbar">
+      <button class="uds-btn uds-btn--ghost uds-btn--icon uds-explorer-toggle" type="button"
+              data-uds-drawer-open="explorer" aria-controls="explorer" aria-expanded="false" aria-label="Abrir navegação">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <a class="uds-topbar__brand" href="#">Universal DS</a>
+      <nav class="uds-topbar__nav" aria-label="Principal">
+        <ul>
+          <li><a class="uds-topbar__link" href="#" aria-current="page">Início</a></li>
+          <li><a class="uds-topbar__link" href="#">Componentes</a></li>
+          <li><a class="uds-topbar__link" href="#">Padrões</a></li>
+          <li><a class="uds-topbar__link" href="#">Tokens</a></li>
+        </ul>
+      </nav>
+      <span class="uds-topbar__spacer"></span>
+      <div class="uds-topbar__actions">
+        <div class="uds-topbar__collapse">
+          <span class="uds-status uds-status--healthy">estável</span>
+          <span class="uds-status uds-status--unknown">fonte desconhecida</span>
+          <a class="uds-btn uds-btn--ghost uds-btn--sm" href="#docs">Documentação</a>
+          <button class="uds-btn uds-btn--ghost uds-btn--sm" type="button" data-uds-theme-toggle aria-pressed="false">Tema escuro</button>
+        </div>
+        <button class="uds-btn uds-btn--secondary uds-btn--icon" type="button" data-uds-drawer-open="attention" aria-controls="attention" aria-expanded="false" aria-label="Requer atenção">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+        </button>
+        <div class="uds-menu">
+          <button class="uds-btn uds-btn--secondary uds-btn--sm" type="button" id="user-btn"
+                  data-uds-menu aria-haspopup="menu" aria-expanded="false" aria-controls="user-menu">Conta ▾</button>
+          <ul class="uds-menu__list" id="user-menu" role="menu" aria-labelledby="user-btn" hidden>
+            <li role="none"><a class="uds-menu__item" role="menuitem" href="#">Meu perfil</a></li>
+            <li role="none"><a class="uds-menu__item" role="menuitem" href="#">Sessões ativas</a></li>
+            <li role="none"><button class="uds-menu__item" role="menuitem" type="button" data-uds-theme-toggle>Alternar tema</button></li>
+            <li role="separator" class="uds-menu__separator"></li>
+            <li role="none"><button class="uds-menu__item uds-menu__item--danger" role="menuitem" type="button">Sair</button></li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <aside class="uds-explorer" id="explorer" aria-label="Explorar">
+      <div class="uds-explorer__header">
+        <h2 class="uds-explorer__heading">Explorar</h2>
+        <button class="uds-btn uds-btn--ghost uds-btn--icon uds-btn--sm uds-explorer-toggle" type="button" data-uds-drawer-close aria-label="Fechar navegação">✕</button>
+      </div>
+      <nav class="uds-explorer__scroll" aria-label="Explorar">
+        <ul class="uds-tree">
+          <li>
+            <button class="uds-tree__group" type="button" data-uds-disclosure aria-expanded="true" aria-controls="tree-plat">
+              <svg class="uds-tree__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+              <span class="uds-tree__label">Fundamentos</span>
+            </button>
+            <ul class="uds-tree__subtree" id="tree-plat">
+              <li><a class="uds-tree__item" href="#" aria-current="page"><span class="uds-tree__label">Visão geral</span></a></li>
+              <li><a class="uds-tree__item" href="#"><span class="uds-tree__label">Cores e tipografia</span></a></li>
+              <li><a class="uds-tree__item" href="#"><span class="uds-tree__label">Espaçamento e movimento</span></a></li>
+            </ul>
+          </li>
+          <li>
+            <button class="uds-tree__group" type="button" data-uds-disclosure aria-expanded="false" aria-controls="tree-prov">
+              <svg class="uds-tree__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+              <span class="uds-tree__label">Padrões</span>
+            </button>
+            <ul class="uds-tree__subtree" id="tree-prov" hidden>
+              <li><a class="uds-tree__item" href="#"><span class="uds-tree__label">Formulários</span></a></li>
+              <li><a class="uds-tree__item" href="#"><span class="uds-tree__label">Navegação</span></a></li>
+              <li><span class="uds-tree__item" aria-disabled="true"><span class="uds-tree__label">Visualização (planejado)</span></span></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <div class="uds-explorer__footer">UDS v0.1 · demonstração</div>
+    </aside>
+
+    <main class="uds-workspace" id="workspace" tabindex="-1">
+      <div class="uds-page-header">
+        <div>
+          <h1 class="uds-page-header__title">Componentes UDS v0.1</h1>
+          <p class="uds-page-header__subtitle">Foundation, formulários e navegação — núcleo independente, sem perfil de produto.</p>
+        </div>
+        <div class="uds-form-actions">
+          <button class="uds-btn uds-btn--secondary" type="button" data-uds-drawer-open="audit" aria-controls="audit" aria-expanded="false">Ver painel</button>
+          <button class="uds-btn uds-btn--primary" type="button">Novo item</button>
+        </div>
+      </div>
+
+      <section class="uds-card demo-section" aria-labelledby="apps-title">
+        <div class="uds-disclosure__header">
+          <button class="uds-disclosure__trigger" type="button" data-uds-disclosure aria-expanded="true" aria-controls="apps-panel" id="apps-title">
+            <svg class="uds-tree__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+            Aplicações <span class="uds-disclosure__count">3</span>
+          </button>
+        </div>
+        <div class="uds-disclosure__panel" id="apps-panel">
+          <ul class="uds-launcher-grid">
+            <li><a class="uds-launcher uds-accent--apps" href="#"><span class="uds-launcher__icon" aria-hidden="true">◆</span><span class="uds-launcher__text"><span class="uds-launcher__label">Aplicação principal</span><span class="uds-launcher__meta">produção</span></span><span class="uds-status uds-status--healthy">ativo</span></a></li>
+            <li><a class="uds-launcher uds-accent--caps" href="#"><span class="uds-launcher__icon" aria-hidden="true">●</span><span class="uds-launcher__text"><span class="uds-launcher__label">Integração com um nome longo para demonstrar truncamento</span><span class="uds-launcher__meta">três capacidades</span></span><span class="uds-status uds-status--warning">parcial</span></a></li>
+            <li><span class="uds-launcher uds-accent--activity" aria-disabled="true"><span class="uds-launcher__icon" aria-hidden="true">▲</span><span class="uds-launcher__text"><span class="uds-launcher__label">Módulo futuro</span><span class="uds-launcher__meta">planejado</span></span><span class="uds-status uds-status--unknown">sem fonte</span></span></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="uds-card uds-card__body demo-section" aria-labelledby="btn-title">
+        <h2 id="btn-title" class="demo-h2">Botões e links</h2>
+        <div class="uds-form-actions">
+          <button class="uds-btn uds-btn--primary" type="button">Primário</button>
+          <button class="uds-btn uds-btn--secondary" type="button">Secundário</button>
+          <button class="uds-btn uds-btn--ghost" type="button">Ghost</button>
+          <button class="uds-btn uds-btn--danger" type="button">Excluir</button>
+          <button class="uds-btn uds-btn--primary" type="button" aria-busy="true" disabled>Salvando…</button>
+          <button class="uds-btn uds-btn--secondary" type="button" disabled>Desabilitado</button>
+          <button class="uds-btn uds-btn--primary uds-btn--sm" type="button">Pequeno</button>
+          <button class="uds-btn uds-btn--primary uds-btn--lg" type="button">Grande</button>
+        </div>
+        <p>Texto com <a class="uds-link" href="#">link padrão</a> e <a class="uds-link uds-link--quiet" href="#">link discreto</a>.</p>
+      </section>
+
+      <section class="uds-card uds-card__body demo-section" aria-labelledby="form-title">
+        <h2 id="form-title" class="demo-h2">Formulário com validação</h2>
+        <form class="uds-form" data-uds-validate novalidate action="#" id="demo-form">
+          <p class="uds-alert uds-alert--error" role="alert" data-uds-error-summary hidden></p>
+          <div class="uds-form-row">
+            <div class="uds-field">
+              <label class="uds-label" for="f-name">Nome <span class="uds-label__req" aria-hidden="true">*</span></label>
+              <input class="uds-input" id="f-name" name="name" required autocomplete="name" aria-describedby="f-name-err">
+              <p class="uds-error" id="f-name-err" data-uds-error-for="f-name"></p>
+            </div>
+            <div class="uds-field">
+              <label class="uds-label" for="f-email">E-mail <span class="uds-label__req" aria-hidden="true">*</span></label>
+              <input class="uds-input" id="f-email" name="email" type="email" required autocomplete="email" aria-describedby="f-email-help f-email-err">
+              <p class="uds-help" id="f-email-help">Usado para notificações da conta.</p>
+              <p class="uds-error" id="f-email-err" data-uds-error-for="f-email"></p>
+            </div>
+          </div>
+          <div class="uds-form-row">
+            <div class="uds-field">
+              <label class="uds-label" for="f-username">Usuário <span class="uds-label__req" aria-hidden="true">*</span></label>
+              <input class="uds-input" id="f-username" name="username" required autocomplete="username" aria-describedby="f-username-err">
+              <p class="uds-error" id="f-username-err" data-uds-error-for="f-username"></p>
+            </div>
+            <div class="uds-field">
+              <label class="uds-label" for="f-password">Senha <span class="uds-label__req" aria-hidden="true">*</span></label>
+              <input class="uds-input" id="f-password" name="password" type="password" required autocomplete="new-password" minlength="8" aria-describedby="f-password-help f-password-err">
+              <p class="uds-help" id="f-password-help">Use pelo menos 8 caracteres; a regra definitiva pertence ao consumidor.</p>
+              <p class="uds-error" id="f-password-err" data-uds-error-for="f-password"></p>
+            </div>
+          </div>
+          <div class="uds-form-row">
+            <div class="uds-field">
+              <label class="uds-label" for="f-role">Papel</label>
+              <select class="uds-select" id="f-role" name="role">
+                <option>Membro</option><option>Administrador</option>
+              </select>
+            </div>
+            <div class="uds-field">
+              <label class="uds-label" for="f-tenant">Tenant <span class="uds-label__opt">(somente leitura)</span></label>
+              <input class="uds-input" id="f-tenant" value="tenant-default" readonly>
+            </div>
+            <div class="uds-field">
+              <label class="uds-label" for="f-disabled">Client ID</label>
+              <input class="uds-input" id="f-disabled" value="client-example-v1" disabled>
+            </div>
+          </div>
+          <div class="uds-field">
+            <label class="uds-label" for="f-notes">Observações <span class="uds-label__opt">(opcional)</span></label>
+            <textarea class="uds-textarea" id="f-notes" name="notes" minlength="10" aria-describedby="f-notes-err"></textarea>
+            <p class="uds-error" id="f-notes-err" data-uds-error-for="f-notes"></p>
+          </div>
+          <fieldset class="uds-choices">
+            <legend class="uds-label">Notificações</legend>
+            <label class="uds-check"><input type="checkbox" name="n1" checked><span>Alertas de atenção</span></label>
+            <label class="uds-check"><input type="checkbox" name="n2"><span>Resumo semanal</span></label>
+            <label class="uds-check"><input type="checkbox" name="n3" disabled><span>SMS (indisponível)</span></label>
+          </fieldset>
+          <label class="uds-check"><input type="checkbox" id="f-terms" name="terms" required aria-describedby="f-terms-err"><span>Li e aceito os <a class="uds-link" href="#terms">Termos de uso</a> e a <a class="uds-link" href="#privacy">Política de privacidade</a> <span class="uds-label__req" aria-hidden="true">*</span></span></label>
+          <p class="uds-error" id="f-terms-err" data-uds-error-for="f-terms"></p>
+          <div class="uds-form-actions">
+            <button class="uds-btn uds-btn--primary" type="submit">Salvar</button>
+            <button class="uds-btn uds-btn--secondary" type="reset">Limpar</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="uds-card uds-card__body demo-section" aria-labelledby="status-title">
+        <h2 id="status-title" class="demo-h2">Status honesto</h2>
+        <div class="uds-form-actions">
+          <span class="uds-status uds-status--healthy">saudável</span>
+          <span class="uds-status uds-status--warning">aviso</span>
+          <span class="uds-status uds-status--critical">crítico</span>
+          <span class="uds-status uds-status--unknown">desconhecido</span>
+        </div>
+        <div class="uds-alert uds-alert--info demo-gap"><p class="uds-alert__title">Fonte não integrada</p><p>Uma fonte ausente não deve ser apresentada como “sem eventos”.</p></div>
+      </section>
+    </main>
+  </div>
+
+  <aside class="uds-drawer" id="attention" aria-labelledby="attention-title">
+    <div class="uds-drawer__header">
+      <h2 class="uds-drawer__title" id="attention-title">Requer atenção</h2>
+      <button class="uds-btn uds-btn--ghost uds-btn--icon uds-btn--sm" type="button" data-uds-drawer-close aria-label="Fechar">✕</button>
+    </div>
+    <div class="uds-drawer__body">
+      <p class="uds-status uds-status--unknown">Cobertura desconhecida</p>
+      <p>Nenhum agregador de alertas está integrado. Não inferir “tudo saudável”.</p>
+    </div>
+  </aside>
+  <aside class="uds-drawer" id="audit" aria-labelledby="audit-title">
+    <div class="uds-drawer__header">
+      <h2 class="uds-drawer__title" id="audit-title">Painel contextual</h2>
+      <button class="uds-btn uds-btn--ghost uds-btn--icon uds-btn--sm" type="button" data-uds-drawer-close aria-label="Fechar">✕</button>
+    </div>
+    <div class="uds-drawer__body">
+      <div class="uds-field">
+        <label class="uds-label" for="audit-q">Filtrar itens</label>
+        <input class="uds-input" id="audit-q" type="search" data-uds-autofocus>
+      </div>
+      <p class="uds-help demo-gap">Fonte: não integrada.</p>
+    </div>
+  </aside>
+</body>
+</html>
