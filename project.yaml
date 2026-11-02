@@ -1,0 +1,14 @@
+# Projeção de MAPA_CANONICO_VERDADEIRO.YAML (repo_modelo): não cria nem substitui identidade.
+schema_version: "0.2"
+project:
+  uuid: "1a93a858-64bc-4790-a59f-b6e3b94a962b"
+  canonical_code: "T2U"
+  name: "DESIGN-SYSTEM-REFERENCE"
+  slug: "design_sys_refer"
+workspace:
+  layout: "repo_modelo/CANONICAL/v0.4"
+  uuid_prefix: "1a93a858"
+repositories: []  # declarar no mapa; verificar o remote, não inferir do slug
+development:
+  dev_status: null  # declarado no mapa; null = não definido
+  dev_stage: null
