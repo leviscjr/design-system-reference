@@ -1,0 +1,44 @@
+/*
+ * Ponte LC Hub -> UDS (adoção incremental, sem alterar classes nem markup do hub).
+ *
+ * O :root do hub (SCRIPTS/hub/hub_app.py, observado em 2026-11-02 na branch
+ * claude/provider-check-console-v3 do acervo VPS_A1_HUB) declara --bg, --surface, --text...
+ * com os MESMOS valores da extração Shared_Arch (tokens.json). Esta ponte redireciona
+ * essas variáveis para os papéis --uds-*, de modo que tema/perfil passam a ser
+ * governados pelo UDS sem mudança visual, exceto onde indicado.
+ *
+ * Ordem de carga no hub (depois do <style> existente, mesmo origin; CSP style-src 'self'):
+ *   <link rel="stylesheet" href="/static/uds/uds.tokens.css">
+ *   <link rel="stylesheet" href="/static/uds/uds.profile.lc-hub.css">
+ *   <link rel="stylesheet" href="/static/uds/lchub-bridge.css">
+ *   <link rel="stylesheet" href="/static/uds/uds.components.css">   (opcional, por componente)
+ *   <html data-theme="light" data-uds-profile="lc-hub">
+ *
+ * :root:root eleva a especificidade para vencer o :root inline do hub sem depender só da ordem.
+ */
+:root:root {
+  --bg: var(--uds-surface-page);              /* = #F4F6FB, sem mudança */
+  --surface: var(--uds-surface-card);         /* = #FFFFFF, sem mudança */
+  --surface-border: var(--uds-border-default);/* = #E2E8F0, sem mudança (decorativa) */
+  --surface-strong: var(--uds-surface-hover); /* = #F8FAFC, sem mudança */
+  --text: var(--uds-text-primary);            /* = #0F172A, sem mudança */
+  --text-dim: var(--uds-text-secondary);      /* = #475569, sem mudança */
+  --text-faint: var(--uds-text-muted);        /* MUDA #94A3B8 -> #5B6A80: o original fica abaixo de AA (2.6:1) */
+  --accent: var(--uds-link);                  /* = #2563EB, sem mudança */
+  --accent-strong: var(--uds-action-primary); /* = #1E3A8A, sem mudança */
+  --accent-soft: var(--uds-surface-selected); /* = #EFF4FF, sem mudança */
+  --danger: var(--uds-status-critical);       /* = #DC2626, sem mudança */
+  --danger-strong: var(--uds-action-danger);  /* MUDA #DC2626 -> #B91C1C em botões: branco sobre #DC2626 = 4.83, sobre #B91C1C = 6.47 */
+  --good: var(--uds-status-healthy);          /* com perfil lc-hub: #13804B (candidato do perfil V2) */
+  --warn: var(--uds-status-warning);          /* = #D97706, sem mudança */
+  --neutral: var(--uds-status-unknown);       /* MUDA #94A3B8 -> #64748B: indicador desconhecido >= 3:1 */
+  /* --radius (18px) e --radius-sm (10px) do hub são decisão de produto: não mapeados. */
+}
+
+/* Campos do hub: limite com contraste 3:1 (WCAG 1.4.11) sem trocar a borda decorativa dos cards. */
+input[type=text], input[type=email], input[type=password], input[type=tel], input[type=search], textarea, select {
+  border-color: var(--uds-border-interactive);
+}
+input[aria-invalid="true"], textarea[aria-invalid="true"], select[aria-invalid="true"] {
+  border-color: var(--uds-status-critical);
+}

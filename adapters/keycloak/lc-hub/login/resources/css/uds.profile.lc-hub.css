@@ -1,0 +1,25 @@
+/* GERADO por tools/uds_tokens.py a partir de profiles/lc-hub.tokens.json. Não editar à mão. */
+/* Perfil de produto: valores escopados; não são defaults universais. */
+:root {
+  --uds-launcher-gap: 8px;
+  --uds-launcher-height: 42px;
+  --uds-launcher-icon-box: 30px;
+  --uds-launcher-padding-block: 6px;
+  --uds-launcher-padding-inline: 12px;
+  --uds-type-card-title-size: 16px;
+  --uds-type-explorer-group-size: 15px;
+  --uds-type-explorer-group-weight: 600;
+  --uds-type-explorer-heading-size: 12px;
+  --uds-type-explorer-icon-size: 18px;
+  --uds-type-explorer-item-size: 14px;
+  --uds-type-launcher-label-size: 14px;
+  --uds-type-meta-size: 12px;
+  --uds-type-nav-size: 14px;
+  --uds-accent-domain-apps: #245BE8;
+  --uds-accent-domain-caps: #7436DE;
+  --uds-accent-domain-activity: #087F83;
+  --uds-accent-domain-audit: #087FBA;
+  --uds-accent-domain-attention: #B96A06;
+  --uds-status-healthy: #13804B;
+  --uds-status-healthy-text: #13804B;
+}

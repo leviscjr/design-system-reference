@@ -1,0 +1,4 @@
+/* Apenas para as páginas de exemplo; não faz parte do contrato do UDS. */
+.demo-section { margin-bottom: var(--uds-space-xl); }
+.demo-h2 { margin: 0 0 var(--uds-space-md); font-size: var(--uds-type-subtitle-size); }
+.demo-gap { margin-top: var(--uds-space-md); }
