@@ -5,11 +5,8 @@
     "version": "0.1.0",
     "date": "2026-11-02",
     "status": "candidate",
-    "statusNote": "Papéis = contrato vNext normativo. Valores literais novos = CANDIDATOS até homologação visual humana (vNext §2; LC_HUB_PROFILE_V2 §7). Derivados ({sa.*}) herdam o status FATO da extração.",
-    "cssPrefix": "--uds-",
-    "mirrors": [
-      "adapters/keycloak/lc-hub/login/resources/css/uds.tokens.css"
-    ]
+    "statusNote": "Papéis = contrato vNext normativo. Valores literais novos = CANDIDATOS até homologação visual humana (vNext §2). Derivados ({sa.*}) herdam o status FATO da extração.",
+    "cssPrefix": "--uds-"
   },
   "provenance": {
     "derived": "valor é referência literal a tokens.json (FATO da extração)",
@@ -29,7 +26,7 @@
       "link-hover": "candidate (dark)",
       "shadow.*": "candidate",
       "backdrop": "fixed — sobreposição de overlay",
-      "motion.*": "candidate — faixas de estudo do vNext §2 (não homologadas no LC Hub)",
+      "motion.*": "candidate — faixas de estudo do vNext §2, ainda não homologadas",
       "control.touch-min": "fixed — alvo mínimo para ponteiro grosso"
     }
   },

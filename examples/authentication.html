@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UDS — padrão universal de autenticação</title>
+  <link rel="stylesheet" href="../css/uds.tokens.css">
+  <link rel="stylesheet" href="../css/uds.components.css">
+  <link rel="stylesheet" href="demo.css">
+  <script src="../js/uds.js" defer></script>
+</head>
+<body class="uds-root">
+  <main class="uds-workspace demo-auth" id="main">
+    <section class="uds-card uds-card__body demo-section" aria-labelledby="auth-title">
+      <h1 class="uds-page-header__title" id="auth-title">Entrar</h1>
+      <p class="uds-page-header__subtitle">Exemplo neutro de apresentação; autenticação, marca e regras pertencem ao consumidor.</p>
+
+      <form class="uds-form" data-uds-validate novalidate action="#">
+        <p class="uds-alert uds-alert--error" role="alert" data-uds-error-summary hidden></p>
+
+        <div class="uds-field">
+          <label class="uds-label" for="auth-user">Usuário ou e-mail <span class="uds-label__req" aria-hidden="true">*</span></label>
+          <input class="uds-input" id="auth-user" name="username" required autocomplete="username"
+                 aria-describedby="auth-user-error" aria-invalid="true" value="exemplo">
+          <p class="uds-error" id="auth-user-error" data-uds-error-for="auth-user">Usuário ou senha inválidos.</p>
+        </div>
+
+        <div class="uds-field">
+          <label class="uds-label" for="auth-password">Senha <span class="uds-label__req" aria-hidden="true">*</span></label>
+          <input class="uds-input" id="auth-password" name="password" type="password" required
+                 autocomplete="current-password" aria-describedby="auth-password-error">
+          <p class="uds-error" id="auth-password-error" data-uds-error-for="auth-password"></p>
+        </div>
+
+        <label class="uds-check">
+          <input type="checkbox" id="auth-terms" name="terms" required aria-describedby="auth-terms-error">
+          <span>Li e aceito os <a class="uds-link" href="#terms-placeholder">Termos de uso</a> e a <a class="uds-link" href="#privacy-placeholder">Política de privacidade</a> <span class="uds-label__req" aria-hidden="true">*</span></span>
+        </label>
+        <p class="uds-error" id="auth-terms-error" data-uds-error-for="auth-terms"></p>
+
+        <div class="uds-form-actions">
+          <button class="uds-btn uds-btn--primary" type="submit">Continuar</button>
+          <a class="uds-link" href="#recovery-placeholder">Esqueceu a senha?</a>
+        </div>
+      </form>
+    </section>
+  </main>
+</body>
+</html>

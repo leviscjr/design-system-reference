@@ -5,15 +5,16 @@ Camadas, em ordem de precedência crescente:
   2. tokens.vnext.json        extensão universal vNext (papéis semânticos)
   3. profiles/*.tokens.json   perfil de produto (escopo `[data-uds-profile]`)
 
-Saídas versionadas em css/ para consumo sem build:
-  css/uds.tokens.css               --sa-* (extração) + --uds-* (vNext), light/dark
-  css/uds.profile.<name>.css       sobreposições do perfil, escopadas
+Saídas versionadas:
+  css/uds.tokens.css                         CSS do núcleo para desenvolvimento
+  dist/uds-v0.1/                             pacote UDS independente
 
 Uso:
   python tools/uds_tokens.py build     gera os arquivos CSS
   python tools/uds_tokens.py check     falha se o CSS versionado estiver desatualizado
   python tools/uds_tokens.py contrast  relatório WCAG dos pares declarados
 """
+import hashlib
 import json
 import re
 import sys
@@ -36,10 +37,6 @@ def extracted_colors(base):
     """Cores da extração por tema: {'light': {key: value}, 'dark': {...}}."""
     color = base['semantic']['color']
     return {theme: dict(color[theme]) for theme in ('light', 'dark')}
-
-
-def profiles():
-    return sorted((ROOT / 'profiles').glob('*.tokens.json'))
 
 
 # --------------------------------------------------------------------------
@@ -132,11 +129,11 @@ def build_base(base, vnext):
     return ''.join(out)
 
 
-def build_profile(name, profile, selector=None):
+def build_profile(name, profile, source, selector=None):
     # :root[...] vence o :root da base independentemente da ordem de carga; o seletor
     # simples permite aplicar o perfil a uma subárvore. Espelhos podem fixar outro escopo.
     selector = selector or ':root[data-uds-profile="%s"], [data-uds-profile="%s"]' % (name, name)
-    out = [HEADER.format(sources='profiles/%s.tokens.json' % name),
+    out = [HEADER.format(sources=source),
            '/* Perfil de produto: valores escopados; não são defaults universais. */\n',
            block(selector, scalars_css(profile) + theme_css(profile, 'light'))]
     dark = theme_css(profile, 'dark')
@@ -145,17 +142,40 @@ def build_profile(name, profile, selector=None):
     return ''.join(out)
 
 
+def _read(rel):
+    return (ROOT / rel).read_text(encoding='utf-8').replace('\r\n', '\n')
+
+
+def _manifest(files, package, version):
+    entries = []
+    for path, content in sorted(files.items(), key=lambda item: item[0].as_posix()):
+        entries.append({
+            'path': path.as_posix(),
+            'sha256': hashlib.sha256(content.encode('utf-8')).hexdigest(),
+        })
+    return json.dumps({'package': package, 'version': version, 'files': entries}, indent=2) + '\n'
+
+
 def outputs():
     base, vnext = load(ROOT / 'tokens.json'), load(ROOT / 'tokens.vnext.json')
-    files = {ROOT / 'css' / 'uds.tokens.css': build_base(base, vnext)}
-    for path in profiles():
-        name = path.name[:-len('.tokens.json')]
-        profile = load(path)
-        files[ROOT / 'css' / ('uds.profile.%s.css' % name)] = build_profile(name, profile)
-        for mirror in profile.get('meta', {}).get('mirrors', []):
-            files[ROOT / mirror['path']] = build_profile(name, profile, mirror.get('selector'))
-    for target in vnext.get('meta', {}).get('mirrors', []):
-        files[ROOT / target] = files[ROOT / 'css' / 'uds.tokens.css']
+    base_css = build_base(base, vnext)
+    files = {ROOT / 'css' / 'uds.tokens.css': base_css}
+
+    package_root = ROOT / 'dist' / 'uds-v0.1'
+    package_files = {
+        Path('css/uds.tokens.css'): base_css,
+        Path('css/uds.components.css'): _read('css/uds.components.css'),
+        Path('js/uds.js'): _read('js/uds.js'),
+        Path('tokens.json'): _read('tokens.json'),
+        Path('tokens.vnext.json'): _read('tokens.vnext.json'),
+        Path('COMPONENTS.md'): _read('COMPONENTS.md'),
+        Path('LICENSE'): _read('LICENSE'),
+        Path('patterns/AUTHENTICATION.md'): _read('patterns/AUTHENTICATION.md'),
+    }
+    for rel, content in package_files.items():
+        files[package_root / rel] = content
+    files[package_root / 'manifest.json'] = _manifest(package_files, 'uds', vnext['meta']['version'])
+
     return files
 
 
@@ -201,9 +221,6 @@ def ratio(fg, bg):
 def contrast_report():
     base, vnext = load(ROOT / 'tokens.json'), load(ROOT / 'tokens.vnext.json')
     layers = [('vnext', vnext, Resolver(base, vnext))]
-    for path in profiles():
-        profile = load(path)
-        layers.append((path.name[:-len('.tokens.json')], profile, Resolver(base, vnext, profile)))
     rows = []
     for name, layer, resolver in layers:
         for pair in layer.get('contrastPairs', []):

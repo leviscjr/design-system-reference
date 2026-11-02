@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.1.0] — 2026-11-02 · consolidação consumível
+
+Consolidação do candidato anterior como biblioteca independente, ainda sem homologação visual humana ou implantação.
+
+### Alterado
+- o adapter Keycloak e a ponte/perfil operacional LC-HUB deixam de ser artefatos ativos do T2U; a implementação específica pertence ao P2H e o trabalho anterior permanece recuperável no histórico Git;
+- gerador passa a produzir somente `dist/uds-v0.1/` e manifest SHA-256, sem espelhar arquivos em adapters ou workspaces consumidores;
+- `LC_HUB_PROFILE_V2.md` permanece apenas como referência histórica, sem fonte operacional concorrente no T2U;
+- `patterns/AUTHENTICATION.md` e `examples/authentication.html` substituem a prévia específica por um contrato universal e neutro;
+- exemplos e contratos cobrem usuário, senha, checkbox obrigatório, links jurídicos, erros e acessibilidade sem atribuir regras de negócio ao UDS.
+
+### Limites preservados
+- `tokens.json` original permanece protegido por hash; contratos e pares de contraste continuam verificados;
+- P2H, Keycloak, VPS e produção não foram modificados;
+- CSP permanece sem script/estilo inline nos exemplos e sem recursos remotos nos artefatos distribuíveis.
+
+### Evidências da consolidação
+- `python -m unittest discover -s tests` → 23 testes OK;
+- `python tools/uds_tokens.py contrast` → 46/46 verificações PASS;
+- Google Chrome headless: demo universal em 1440×1100 e padrão de autenticação em largura estreita;
+- `tokens.json` preservado pelo hash `904fefc2…516984`.
+
 ## [0.1.0-candidate] — 2026-11-02 · branch `feat/uds-lchub-keycloak-v1`
 
 Primeira implementação utilizável do UDS sobre `feat/universal-design-vnext` (393283b). Status: **IMPLEMENTED + TESTED_STATIC + TESTED_BROWSER (exemplos)**; **não HUMAN_APPROVED**, **não implantado**.

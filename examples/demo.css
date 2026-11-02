@@ -2,3 +2,7 @@
 .demo-section { margin-bottom: var(--uds-space-xl); }
 .demo-h2 { margin: 0 0 var(--uds-space-md); font-size: var(--uds-type-subtitle-size); }
 .demo-gap { margin-top: var(--uds-space-md); }
+.demo-auth { width: 100%; max-width: 560px; margin-inline: auto; }
+@media (max-width: 599px) {
+  .demo-auth { padding: var(--uds-space-md); }
+}

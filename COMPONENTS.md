@@ -10,21 +10,19 @@
 |---|---|---|
 | `tokens.json` | extração Shared_Arch (FATO) | não (teste de hash) |
 | `tokens.vnext.json` | papéis semânticos vNext + proveniência + pares de contraste | sim |
-| `profiles/<p>.tokens.json` | valores de produto, escopados | sim |
 | `css/uds.tokens.css` | `--sa-*` + `--uds-*`, light/dark/auto | **gerado** |
-| `css/uds.profile.<p>.css` | perfil em `:root[data-uds-profile="<p>"]` | **gerado** |
 | `css/uds.components.css` | componentes `.uds-*` | sim |
 | `js/uds.js` | comportamento por `data-uds-*` (opcional) | sim |
+| `dist/uds-v0.1/` | núcleo distribuível com manifest, tokens, componentes, JS e padrões | **gerado** |
 
 ```html
-<html data-theme="light" data-uds-profile="lc-hub">   <!-- data-theme: light | dark | auto -->
+<html data-theme="light">   <!-- data-theme: light | dark | auto -->
 <link rel="stylesheet" href="css/uds.tokens.css">
-<link rel="stylesheet" href="css/uds.profile.lc-hub.css">   <!-- opcional -->
 <link rel="stylesheet" href="css/uds.components.css">
 <script src="js/uds.js" defer></script>                    <!-- opcional -->
 ```
 
-Regenerar após editar tokens: `python tools/uds_tokens.py build` · contraste: `python tools/uds_tokens.py contrast` · testes: `python -m unittest discover -s tests`.
+Regenerar após editar tokens/fontes: `python tools/uds_tokens.py build` · verificar pacote: `python tools/uds_tokens.py check` · contraste: `python tools/uds_tokens.py contrast` · testes: `python -m unittest discover -s tests`.
 
 **Escopo por classe.** Nenhum seletor global de elemento; `.uds-root` é opt-in. Adoção é incremental por componente.
 **CSP.** Sem estilo/script inline e sem `eval`: compatível com `style-src 'self'` e `script-src 'self'`.
@@ -46,6 +44,8 @@ Regenerar após editar tokens: `python tools/uds_tokens.py build` · contraste: 
 | Obrigatório | `<span class="uds-label__req" aria-hidden="true">*</span>` + atributo `required` | — | o `*` é visual; a semântica vem de `required` |
 | Opcional | `.uds-label__opt` | — | texto explícito "(opcional)" |
 | Checkbox / Radio | `label.uds-check > input + span`; grupo em `fieldset.uds-choices > legend` | checked, disabled, inválido | nativo + `accent-color` (sem recriação visual) |
+| Checkbox obrigatório | checkbox nativo com `required` + erro referenciado | unchecked/invalid | regra de obrigatoriedade pertence ao formulário consumidor; o DS só apresenta estado e mensagem |
+| Links jurídicos | `.uds-link` dentro ou próximo do rótulo | hover, focus-visible | o consumidor fornece URLs/textos e decide a regra jurídica; o DS não presume consentimento |
 | Erro de campo | `p.uds-error[data-uds-error-for=<id>]` | vazio = oculto | ícone + texto; não depende só de cor |
 | Resumo de erros | `.uds-alert.uds-alert--error[role=alert][data-uds-error-summary][hidden]` | oculto até envio inválido | anunciado por `role=alert` |
 | Botão | `.uds-btn` + `--primary|--secondary|--ghost|--danger`, `--sm|--lg|--block|--icon` | hover, focus-visible, `disabled`, `aria-busy="true"` (spinner) | ícone-só exige `aria-label`; toque ≥ 44px em `pointer: coarse` |
@@ -68,8 +68,12 @@ Regenerar após editar tokens: `python tools/uds_tokens.py build` · contraste: 
 | Launcher | `a.uds-launcher.uds-accent--<domínio> > __icon + __text(__label + __meta) + .uds-status?` | eixos fixos (grid), truncamento com `min-width:0`, `aria-disabled` tracejado |
 | Status | `.uds-status--healthy|warning|critical|unknown` | forma diferente por estado (círculo, losango, quadrado, tracejado) + texto: `unknown` ≠ `healthy` ≠ `0` |
 
-## 5. Verificação realizada (2026-11-02)
+## 5. Padrão universal de autenticação
 
-- Estática (17 testes): hash da extração, paridade light/dark, referências, proveniência, 53 pares de contraste, CSS atualizado, variáveis definidas, CSP dos exemplos, IDs/ARIA, JS sem `eval`, sintaxe.
-- Navegador (`examples/components.html`, Chromium do painel): desktop ~800px e mobile 375px sem scroll horizontal; validação (3 inválidos, foco, resumo, correção ao digitar); drawer (foco, Escape, backdrop, devolução de foco, autofocus); menu (abrir, setas, Escape); árvore; explorer como drawer no mobile; tema escuro.
+`patterns/AUTHENTICATION.md` e `examples/authentication.html` compõem usuário, senha, checkbox obrigatório, links e erros apenas com componentes UDS. O padrão não inclui adapter, marca, texto jurídico, regra de consentimento ou lógica de autenticação. Temas Keycloak e identidade LC-HUB pertencem ao P2H.
+
+## 6. Verificação realizada (2026-11-02)
+
+- Estática (23 testes): hash da extração, paridade light/dark, referências, proveniência, 46 verificações de contraste, CSS/distribuição atualizados, manifest SHA-256, neutralidade de consumidor, CSP dos exemplos, IDs/ARIA, JS sem `eval` e sintaxe.
+- Navegador (Google Chrome headless): `examples/components.html` em 1440×1100 e `examples/authentication.html` em largura estreita; assets locais carregados, composição/estados renderizados e conteúdo sem vínculo de consumidor.
 - **Não verificado:** leitor de tela real, zoom 125–200%, 1920px, Safari/iOS, homologação humana de cor/motion.

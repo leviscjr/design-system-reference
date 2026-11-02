@@ -1,0 +1,38 @@
+{
+  "package": "uds",
+  "version": "0.1.0",
+  "files": [
+    {
+      "path": "COMPONENTS.md",
+      "sha256": "cdedf797a66b232cb2b0ed8b931391947d6523448c1354796ac37ee5268a2c3d"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "91b4223720a0a82a99216646e8677abb297185e17f31967a031b4b611d797942"
+    },
+    {
+      "path": "css/uds.components.css",
+      "sha256": "b138b81a0807b0ed565877af0e59a02efa7d821f7b9f5dccfbd1d1e62a3d8fa1"
+    },
+    {
+      "path": "css/uds.tokens.css",
+      "sha256": "ea8744c8d5763da3eb97e17b53a2e633a6ca178b9e3f95837da8e9246b719564"
+    },
+    {
+      "path": "js/uds.js",
+      "sha256": "5a17d98743428b273b7560e551508004880fe648920f14ec14434aa133567eee"
+    },
+    {
+      "path": "patterns/AUTHENTICATION.md",
+      "sha256": "b2a6aa3f84764981ea2cf8b6bbe05a27e0964a0f8fbb203ce4c7c96a1538769a"
+    },
+    {
+      "path": "tokens.json",
+      "sha256": "904fefc2ef47b30c84ff3a83c42c09b9efdb1189eb5bb1ef9ab4a3d163516984"
+    },
+    {
+      "path": "tokens.vnext.json",
+      "sha256": "dca6b5bf3108ed01a1572c5422d54adc1a6594c2e98eb52a1db6d9d579351bbd"
+    }
+  ]
+}

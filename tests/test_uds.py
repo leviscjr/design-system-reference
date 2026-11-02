@@ -67,6 +67,27 @@ class Tokens(unittest.TestCase):
             self.assertEqual(path.read_bytes().decode('utf-8').replace('\r\n', '\n'), text,
                              '%s desatualizado: rode tools/uds_tokens.py build' % path.name)
 
+    def test_generator_never_targets_adapter_or_consumer_sources(self):
+        allowed_source = ROOT / 'css' / 'uds.tokens.css'
+        for path in uds_tokens.outputs():
+            self.assertTrue(path == allowed_source or (ROOT / 'dist') in path.parents, path)
+
+    def test_distribution_manifests_match_outputs(self):
+        outputs = uds_tokens.outputs()
+        for manifest_path in (ROOT / 'dist').glob('**/manifest.json'):
+            manifest = json.loads(outputs[manifest_path])
+            for entry in manifest['files']:
+                target = manifest_path.parent / entry['path']
+                self.assertIn(target, outputs)
+                digest = hashlib.sha256(outputs[target].encode('utf-8')).hexdigest()
+                self.assertEqual(digest, entry['sha256'], target)
+
+    def test_distribution_is_consumer_neutral(self):
+        paths = [p.relative_to(ROOT).as_posix().lower() for p in uds_tokens.outputs()]
+        joined = '\n'.join(paths)
+        for product in ('keycloak', 'lc-hub', 'lchub', 'p2h'):
+            self.assertNotIn(product, joined)
+
 
 DEFINED = re.compile(r'(--[A-Za-z0-9_-]+)\s*:')
 USED = re.compile(r'var\(\s*(--[A-Za-z0-9_-]+)\s*(,)?')
@@ -80,7 +101,7 @@ def defined_vars(*rels):
 
 
 class Css(unittest.TestCase):
-    TOKENS = ('css/uds.tokens.css', 'css/uds.profile.lc-hub.css')
+    TOKENS = ('css/uds.tokens.css',)
 
     def assert_vars_defined(self, rel, extra=()):
         defined = defined_vars(rel, *self.TOKENS, *extra)
@@ -91,23 +112,8 @@ class Css(unittest.TestCase):
     def test_components_vars(self):
         self.assert_vars_defined('css/uds.components.css')
 
-    def test_bridge_vars(self):
-        self.assert_vars_defined('adapters/lc-hub/lchub-bridge.css')
-
-    def test_keycloak_vars(self):
-        kc = 'adapters/keycloak/lc-hub/login/resources/css/'
-        self.assert_vars_defined(kc + 'uds-login.css', extra=(kc + 'uds.tokens.css', kc + 'uds.profile.lc-hub.css'))
-
-    def test_keycloak_theme_lists_generated_css(self):
-        props = read('adapters/keycloak/lc-hub/login/theme.properties')
-        self.assertIn('parent=keycloak.v2', props)
-        styles = re.search(r'^styles=(.*)$', props, re.M).group(1).split()
-        self.assertEqual(styles[0], 'css/styles.css')
-        for css in styles[1:]:
-            self.assertTrue((ROOT / 'adapters/keycloak/lc-hub/login/resources' / css).exists(), css)
-
     def test_reduced_motion_present(self):
-        for rel in ('css/uds.components.css', 'adapters/keycloak/lc-hub/login/resources/css/uds-login.css'):
+        for rel in ('css/uds.components.css',):
             self.assertIn('prefers-reduced-motion', read(rel))
 
 
@@ -133,7 +139,7 @@ class Page(HTMLParser):
 
 
 class Examples(unittest.TestCase):
-    PAGES = ('examples/components.html',)
+    PAGES = ('examples/components.html', 'examples/authentication.html')
 
     def parse(self, rel):
         page = Page()
@@ -141,7 +147,7 @@ class Examples(unittest.TestCase):
         return page
 
     def test_csp_no_inline(self):
-        for rel in self.PAGES + ('examples/keycloak-login-preview.html',):
+        for rel in self.PAGES:
             self.assertEqual(self.parse(rel).inline, [], '%s tem estilo/script inline' % rel)
 
     def test_ids_unique_and_refs_valid(self):
@@ -153,7 +159,7 @@ class Examples(unittest.TestCase):
             self.assertEqual(broken, [], rel)
 
     def test_toggles_declare_state(self):
-        for rel in self.PAGES:
+        for rel in ('examples/components.html',):
             for tag, a in self.parse(rel).controls_buttons:
                 self.assertEqual(tag, 'button')
                 self.assertIn(a.get('aria-expanded'), ('true', 'false'))
@@ -163,6 +169,40 @@ class Examples(unittest.TestCase):
         for rel in self.PAGES:
             for match in re.finditer(r'<button[^>]*uds-btn--icon[^>]*>', read(rel)):
                 self.assertIn('aria-label=', match.group(0))
+
+    def test_required_checkbox_and_legal_links_are_presentational(self):
+        for rel in self.PAGES:
+            html = read(rel)
+            self.assertRegex(html, r'<input[^>]+type="checkbox"[^>]+required')
+            self.assertIn('Termos de uso</a>', html)
+            self.assertIn('Política de privacidade</a>', html)
+            self.assertRegex(html, r'aria-describedby="[^"]+"')
+
+    def test_core_form_covers_user_and_password_presentation(self):
+        html = read('examples/components.html')
+        self.assertRegex(html, r'<input[^>]+class="uds-input"[^>]+name="username"')
+        self.assertRegex(html, r'<input[^>]+class="uds-input"[^>]+name="password"[^>]+type="password"')
+
+    def test_authentication_pattern_covers_login_anatomy(self):
+        html = read('examples/authentication.html')
+        self.assertRegex(html, r'<input[^>]+name="username"')
+        self.assertRegex(html, r'<input[^>]+name="password"[^>]+type="password"')
+        self.assertIn('role="alert"', html)
+
+    def test_authentication_pattern_has_no_provider_or_product_binding(self):
+        text = read('examples/authentication.html').lower()
+        for product in ('keycloak', 'lc hub', 'lc-hub', 'p2h'):
+            self.assertNotIn(product, text)
+
+    def test_active_examples_have_no_consumer_binding(self):
+        text = '\n'.join(read(rel).lower() for rel in self.PAGES)
+        for product in ('lc hub', 'lc-hub', 'p2h', 'keycloak', 'a1', 'e2.1'):
+            self.assertNotIn(product, text)
+
+    def test_distributable_assets_have_no_remote_dependencies(self):
+        for path, content in uds_tokens.outputs().items():
+            if (ROOT / 'dist') in path.parents and path.suffix in ('.css', '.js', '.properties'):
+                self.assertNotRegex(content, r'https?://|@import\s+url', path)
 
 
 class Script(unittest.TestCase):
