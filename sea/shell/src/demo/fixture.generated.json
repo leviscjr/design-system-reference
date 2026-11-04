@@ -1,0 +1,726 @@
+{
+ "pages": [
+  {
+   "n": 1,
+   "w": 612.0,
+   "h": 792.0,
+   "img": "pages/p01.jpg"
+  },
+  {
+   "n": 4,
+   "w": 612.0,
+   "h": 792.0,
+   "img": "pages/p04.jpg"
+  },
+  {
+   "n": 5,
+   "w": 612.0,
+   "h": 792.0,
+   "img": "pages/p05.jpg"
+  },
+  {
+   "n": 7,
+   "w": 612.0,
+   "h": 792.0,
+   "img": "pages/p07.jpg"
+  }
+ ],
+ "params": [
+  {
+   "id": "abs.vcc",
+   "section": "5.1 Absolute Maximum Ratings",
+   "name": "Supply voltage",
+   "symbol": "VCC",
+   "applies": [
+    "NA555",
+    "NE555",
+    "SA555",
+    "SE555"
+   ],
+   "condition": "",
+   "min": "",
+   "typ": "",
+   "max": "18",
+   "unit": "V",
+   "evidence": {
+    "page": 4,
+    "box": [
+     0.1548,
+     0.1768,
+     0.8836,
+     0.1919
+    ],
+    "excerpt": "Supply voltage 18 V"
+   }
+  },
+  {
+   "id": "abs.io",
+   "section": "5.1 Absolute Maximum Ratings",
+   "name": "Output current",
+   "symbol": "IO",
+   "applies": [
+    "NA555",
+    "NE555",
+    "SA555",
+    "SE555"
+   ],
+   "condition": "",
+   "min": "",
+   "typ": "",
+   "max": "±225",
+   "unit": "mA",
+   "evidence": {
+    "page": 4,
+    "box": [
+     0.1548,
+     0.2121,
+     0.8891,
+     0.2271
+    ],
+    "excerpt": "Output current ±225 mA"
+   }
+  },
+  {
+   "id": "abs.tj",
+   "section": "5.1 Absolute Maximum Ratings",
+   "name": "Operating virtual junction temperature",
+   "symbol": "TJ",
+   "applies": [
+    "NA555",
+    "NE555",
+    "SA555",
+    "SE555"
+   ],
+   "condition": "",
+   "min": "",
+   "typ": "",
+   "max": "150",
+   "unit": "°C",
+   "evidence": {
+    "page": 4,
+    "box": [
+     0.1548,
+     0.2297,
+     0.8866,
+     0.2448
+    ],
+    "excerpt": "Operating virtual 150 °C"
+   }
+  },
+  {
+   "id": "abs.tstg",
+   "section": "5.1 Absolute Maximum Ratings",
+   "name": "Storage temperature",
+   "symbol": "Tstg",
+   "applies": [
+    "NA555",
+    "NE555",
+    "SA555",
+    "SE555"
+   ],
+   "condition": "",
+   "min": "–65",
+   "typ": "",
+   "max": "150",
+   "unit": "°C",
+   "evidence": {
+    "page": 4,
+    "box": [
+     0.1548,
+     0.2825,
+     0.8451,
+     0.2976
+    ],
+    "excerpt": "Storage temperature –65 150"
+   }
+  },
+  {
+   "id": "esd.hbm",
+   "section": "5.2 ESD Ratings",
+   "name": "Electrostatic discharge",
+   "symbol": "V(ESD)",
+   "applies": [
+    "NA555",
+    "NE555",
+    "SA555",
+    "SE555"
+   ],
+   "condition": "Human-body model (HBM), per ANSI/ESDA/JEDEC JS-001",
+   "min": "",
+   "typ": "",
+   "max": "±500",
+   "unit": "V",
+   "evidence": {
+    "page": 4,
+    "box": [
+     0.3444,
+     0.4237,
+     0.8303,
+     0.4387
+    ],
+    "excerpt": "Human-body model (HBM), ±500"
+   }
+  },
+  {
+   "id": "esd.cdm",
+   "section": "5.2 ESD Ratings",
+   "name": "Electrostatic discharge",
+   "symbol": "V(ESD)",
+   "applies": [
+    "NA555",
+    "NE555",
+    "SA555",
+    "SE555"
+   ],
+   "condition": "Charged device model (CDM), per ANSI/ESDA/JEDEC JS-002",
+   "min": "",
+   "typ": "",
+   "max": "±1500",
+   "unit": "V",
+   "evidence": {
+    "page": 4,
+    "box": [
+     0.3444,
+     0.4413,
+     0.8339,
+     0.4563
+    ],
+    "excerpt": "Charged device model ±1500"
+   }
+  },
+  {
+   "id": "rec.vcc",
+   "section": "5.3 Recommended Operating Conditions",
+   "name": "Supply voltage",
+   "symbol": "VCC",
+   "applies": [
+    "NA555",
+    "NE555",
+    "SA555"
+   ],
+   "condition": "",
+   "min": "4.5",
+   "typ": "",
+   "max": "16",
+   "unit": "V",
+   "evidence": {
+    "page": 4,
+    "box": [
+     0.5011,
+     0.5635,
+     0.8451,
+     0.5785
+    ],
+    "excerpt": "NA555, NE555, SA555 4.5 16"
+   }
+  },
+  {
+   "id": "rec.vcc.se",
+   "section": "5.3 Recommended Operating Conditions",
+   "name": "Supply voltage",
+   "symbol": "VCC",
+   "applies": [
+    "SE555"
+   ],
+   "condition": "",
+   "min": "4.5",
+   "typ": "",
+   "max": "18",
+   "unit": "V",
+   "evidence": {
+    "page": 4,
+    "box": [
+     0.5011,
+     0.5811,
+     0.8451,
+     0.5961
+    ],
+    "excerpt": "SE555 4.5 18"
+   }
+  },
+  {
+   "id": "rec.io",
+   "section": "5.3 Recommended Operating Conditions",
+   "name": "Output current",
+   "symbol": "IO",
+   "applies": [
+    "NA555",
+    "NE555",
+    "SA555",
+    "SE555"
+   ],
+   "condition": "",
+   "min": "",
+   "typ": "",
+   "max": "±200",
+   "unit": "mA",
+   "evidence": {
+    "page": 4,
+    "box": [
+     0.1548,
+     0.5987,
+     0.8891,
+     0.6138
+    ],
+    "excerpt": "Output current ±200 mA"
+   }
+  },
+  {
+   "id": "rec.ta.na",
+   "section": "5.3 Recommended Operating Conditions",
+   "name": "Operating free-air temperature",
+   "symbol": "TA",
+   "applies": [
+    "NA555"
+   ],
+   "condition": "",
+   "min": "–40",
+   "typ": "",
+   "max": "105",
+   "unit": "°C",
+   "evidence": {
+    "page": 4,
+    "box": [
+     0.5011,
+     0.6163,
+     0.8451,
+     0.6314
+    ],
+    "excerpt": "NA555 –40 105"
+   }
+  },
+  {
+   "id": "rec.ta.ne",
+   "section": "5.3 Recommended Operating Conditions",
+   "name": "Operating free-air temperature",
+   "symbol": "TA",
+   "applies": [
+    "NE555"
+   ],
+   "condition": "",
+   "min": "0",
+   "typ": "",
+   "max": "70",
+   "unit": "°C",
+   "evidence": {
+    "page": 4,
+    "box": [
+     0.5011,
+     0.6339,
+     0.8451,
+     0.649
+    ],
+    "excerpt": "NE555 0 70"
+   }
+  },
+  {
+   "id": "rec.ta.sa",
+   "section": "5.3 Recommended Operating Conditions",
+   "name": "Operating free-air temperature",
+   "symbol": "TA",
+   "applies": [
+    "SA555"
+   ],
+   "condition": "",
+   "min": "–40",
+   "typ": "",
+   "max": "85",
+   "unit": "°C",
+   "evidence": {
+    "page": 4,
+    "box": [
+     0.5011,
+     0.6515,
+     0.8451,
+     0.6666
+    ],
+    "excerpt": "SA555 –40 85"
+   }
+  },
+  {
+   "id": "rec.ta.se",
+   "section": "5.3 Recommended Operating Conditions",
+   "name": "Operating free-air temperature",
+   "symbol": "TA",
+   "applies": [
+    "SE555"
+   ],
+   "condition": "",
+   "min": "–55",
+   "typ": "",
+   "max": "125",
+   "unit": "°C",
+   "evidence": {
+    "page": 4,
+    "box": [
+     0.5011,
+     0.6691,
+     0.8451,
+     0.6842
+    ],
+    "excerpt": "SE555 –55 125"
+   }
+  },
+  {
+   "id": "th.rja.d",
+   "section": "5.4 Thermal Information",
+   "name": "Junction-to-ambient thermal resistance",
+   "symbol": "RθJA",
+   "applies": [
+    "D (SOIC) · 8 pins"
+   ],
+   "condition": "",
+   "min": "",
+   "typ": "125.4",
+   "max": "",
+   "unit": "°C/W",
+   "evidence": {
+    "page": 5,
+    "box": [
+     0.423,
+     0.2212,
+     0.4606,
+     0.2362
+    ],
+    "excerpt": "125.4"
+   }
+  },
+  {
+   "id": "th.rja.p",
+   "section": "5.4 Thermal Information",
+   "name": "Junction-to-ambient thermal resistance",
+   "symbol": "RθJA",
+   "applies": [
+    "P (PDIP) · 8 pins"
+   ],
+   "condition": "",
+   "min": "",
+   "typ": "98.5",
+   "max": "",
+   "unit": "°C/W",
+   "evidence": {
+    "page": 5,
+    "box": [
+     0.6472,
+     0.2212,
+     0.6775,
+     0.2362
+    ],
+    "excerpt": "98.5"
+   }
+  },
+  {
+   "id": "el.thres15",
+   "section": "5.5 Electrical Characteristics",
+   "name": "THRES voltage level",
+   "symbol": "",
+   "applies": [
+    "NA555",
+    "NE555",
+    "SA555"
+   ],
+   "condition": "VCC = 15V",
+   "min": "8.8",
+   "typ": "10",
+   "max": "11.2",
+   "unit": "V",
+   "evidence": {
+    "page": 5,
+    "box": [
+     0.7024,
+     0.4728,
+     0.8459,
+     0.4879
+    ],
+    "excerpt": "8.8 10 11.2"
+   }
+  },
+  {
+   "id": "el.thres5",
+   "section": "5.5 Electrical Characteristics",
+   "name": "THRES voltage level",
+   "symbol": "",
+   "applies": [
+    "NA555",
+    "NE555",
+    "SA555"
+   ],
+   "condition": "VCC = 5V",
+   "min": "2.4",
+   "typ": "3.3",
+   "max": "4.2",
+   "unit": "V",
+   "evidence": {
+    "page": 5,
+    "box": [
+     0.7024,
+     0.5081,
+     0.8459,
+     0.5231
+    ],
+    "excerpt": "2.4 3.3 4.2"
+   }
+  },
+  {
+   "id": "el.thresi",
+   "section": "5.5 Electrical Characteristics",
+   "name": "THRES current",
+   "symbol": "",
+   "applies": [
+    "NA555",
+    "NE555",
+    "SA555",
+    "SE555"
+   ],
+   "condition": "",
+   "min": "",
+   "typ": "30",
+   "max": "250",
+   "unit": "nA",
+   "evidence": {
+    "page": 5,
+    "box": [
+     0.0937,
+     0.5433,
+     0.8876,
+     0.5584
+    ],
+    "excerpt": "THRES 30 250 nA"
+   }
+  },
+  {
+   "id": "el.trig15",
+   "section": "5.5 Electrical Characteristics",
+   "name": "TRIG voltage level",
+   "symbol": "",
+   "applies": [
+    "NA555",
+    "NE555",
+    "SA555"
+   ],
+   "condition": "VCC = 15V",
+   "min": "4.5",
+   "typ": "5",
+   "max": "5.6",
+   "unit": "V",
+   "evidence": {
+    "page": 5,
+    "box": [
+     0.7024,
+     0.5609,
+     0.8459,
+     0.576
+    ],
+    "excerpt": "4.5 5 5.6"
+   }
+  },
+  {
+   "id": "el.trig5",
+   "section": "5.5 Electrical Characteristics",
+   "name": "TRIG voltage level",
+   "symbol": "",
+   "applies": [
+    "NA555",
+    "NE555",
+    "SA555"
+   ],
+   "condition": "VCC = 5V",
+   "min": "1.1",
+   "typ": "1.67",
+   "max": "2.2",
+   "unit": "V",
+   "evidence": {
+    "page": 5,
+    "box": [
+     0.7024,
+     0.6138,
+     0.8459,
+     0.6288
+    ],
+    "excerpt": "1.1 1.67 2.2"
+   }
+  },
+  {
+   "id": "el.trigi",
+   "section": "5.5 Electrical Characteristics",
+   "name": "TRIG current",
+   "symbol": "",
+   "applies": [
+    "NA555",
+    "NE555",
+    "SA555"
+   ],
+   "condition": "TRIG at 0V",
+   "min": "",
+   "typ": "0.5",
+   "max": "2",
+   "unit": "μA",
+   "evidence": {
+    "page": 5,
+    "box": [
+     0.5011,
+     0.6666,
+     0.8878,
+     0.6817
+    ],
+    "excerpt": "NA555, 0.5 2 μA"
+   }
+  },
+  {
+   "id": "el.reset",
+   "section": "5.5 Electrical Characteristics",
+   "name": "RESET voltage level",
+   "symbol": "",
+   "applies": [
+    "NA555",
+    "NE555",
+    "SA555"
+   ],
+   "condition": "",
+   "min": "0.3",
+   "typ": "0.7",
+   "max": "1",
+   "unit": "V",
+   "evidence": {
+    "page": 5,
+    "box": [
+     0.7024,
+     0.7018,
+     0.8459,
+     0.7169
+    ],
+    "excerpt": "0.3 0.7 1"
+   }
+  },
+  {
+   "id": "sw.tr",
+   "section": "5.6 Switching Characteristics",
+   "name": "Output-pulse rise time",
+   "symbol": "tr",
+   "applies": [
+    "NA555",
+    "NE555",
+    "SA555"
+   ],
+   "condition": "CL = 15pF, TA = 25°C, 20% to 80%",
+   "min": "",
+   "typ": "100",
+   "max": "300",
+   "unit": "ns",
+   "evidence": {
+    "page": 7,
+    "box": [
+     0.7466,
+     0.364,
+     0.835,
+     0.379
+    ],
+    "excerpt": "100 300"
+   }
+  },
+  {
+   "id": "sw.tf",
+   "section": "5.6 Switching Characteristics",
+   "name": "Output-pulse fall time",
+   "symbol": "tf",
+   "applies": [
+    "NA555",
+    "NE555",
+    "SA555"
+   ],
+   "condition": "CL = 15pF, TA = 25°C, 80% to 20%",
+   "min": "",
+   "typ": "100",
+   "max": "300",
+   "unit": "ns",
+   "evidence": {
+    "page": 7,
+    "box": [
+     0.7466,
+     0.4113,
+     0.835,
+     0.4264
+    ],
+    "excerpt": "100 300"
+   }
+  }
+ ],
+ "observations": [
+  {
+   "id": "obs.family",
+   "role": "family-title",
+   "text": "xx555 Precision Timers",
+   "evidence": {
+    "page": 1,
+    "box": [
+     0.386,
+     0.092,
+     0.614,
+     0.1174
+    ],
+    "excerpt": "xx555 Precision Timers"
+   }
+  },
+  {
+   "id": "obs.models",
+   "role": "part-numbers",
+   "text": "NA555, NE555, SA555, SE555",
+   "evidence": {
+    "page": 1,
+    "box": [
+     0.7049,
+     0.0634,
+     0.9142,
+     0.0799
+    ],
+    "excerpt": "NA555, NE555, SA555, SE555"
+   }
+  },
+  {
+   "id": "obs.docid",
+   "role": "document-id",
+   "text": "SLFS022K",
+   "evidence": {
+    "page": 1,
+    "box": [
+     0.6054,
+     0.0771,
+     0.6657,
+     0.0908
+    ],
+    "excerpt": "SLFS022K"
+   }
+  },
+  {
+   "id": "obs.maker",
+   "role": "manufacturer",
+   "text": "Texas Instruments Incorporated",
+   "evidence": {
+    "page": 4,
+    "box": [
+     0.7491,
+     0.9347,
+     0.9142,
+     0.9483
+    ],
+    "excerpt": "Texas Instruments Incorporated"
+   }
+  }
+ ],
+ "source": {
+  "title": "xx555 Precision Timers datasheet (Rev. K)",
+  "docId": "SLFS022K",
+  "pages": 39,
+  "sha256": "a3756e59fd06d0ba736edf9ffe71d99d2aae33fb7e49fedc86165a241179f4a6",
+  "bytes": 2258813,
+  "url": "https://www.ti.com/lit/ds/symlink/ne555.pdf",
+  "manufacturer": "Texas Instruments",
+  "renderedPages": [
+   1,
+   4,
+   5,
+   7
+  ],
+  "dpi": 120
+ }
+}
