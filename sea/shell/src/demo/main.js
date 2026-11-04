@@ -9,7 +9,7 @@
       viewers: [SEA.viewerPdf, SEA.viewerTable, SEA.viewerStructure, SEA.viewerRecord],
       inspect: SEA.demoInspect.inspect, actions: SEA.demoInspect.actions, commands: SEA.demoInspect.commands,
       atmosphere: SEA.SeaAtmosphere(),
-      initialSelection: 'par:el.thres15',
+      initialSelection: 'par:h3.ac',
     });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
