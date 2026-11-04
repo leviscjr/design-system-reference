@@ -14,15 +14,15 @@
 
   SEA.viewerPdf = {
     id: 'pdf', label: 'Datasheet', icon: 'file-text', interaction: 'scroll',
-    locates: (ctx) => !!(ctx.entity && evOf(ctx.entity) && ctx.scope && ctx.scope.id === F().DOC),
+    locates: (ctx) => !!(ctx.entity && evOf(ctx.entity) && ctx.scope && F().documents[ctx.scope.docKey]),
     supports(ctx) {
       if (!ctx.scope) return { icon: 'file-text', title: 'Sem documento neste contexto', action: { label: 'Abrir datasheet', run: () => ctx.store.select(F().DOC, { source: 'canvas' }) } };
-      if (ctx.scope.id !== F().DOC) return { icon: 'file-text', title: 'Sem páginas no fixture', action: { label: 'Abrir datasheet', run: () => ctx.store.select(F().DOC, { source: 'canvas' }) } };
+      if (!F().documents[ctx.scope.docKey]) return { icon: 'file-text', title: 'Sem páginas no fixture', action: { label: 'Abrir datasheet', run: () => ctx.store.select(F().DOC, { source: 'canvas' }) } };
       return true;
     },
     create(host) {
-      const { store } = host, prefs = SEA.prefs, FX = F().FX;
-      let zoom = prefs.get('pdfZoom') || 1, showHl = true, built = false, curPage = FX.pages[0].n, selId = null, lastCtx = null;
+      const { store } = host, prefs = SEA.prefs;
+      let FX = null, docKey = null, zoom = prefs.get('pdfZoom') || 1, showHl = true, built = false, curPage = 1, selId = null, lastCtx = null;
       const hlMap = new Map(), pageEls = new Map();
       const scroll = h('div', { class: 'pdf-scroll', tabindex: '0', role: 'document', 'aria-label': 'Páginas do datasheet' });
       const pagesEl = h('div', { class: 'pdf-pages' });
@@ -53,10 +53,10 @@
         FX.pages.forEach((pg) => {
           if (prev != null && pg.n - prev > 1) pagesEl.appendChild(h('div', { class: 'pdf-gap' }, pg.n - prev === 2 ? `p. ${prev + 1} fora do fixture` : `pp. ${prev + 1}–${pg.n - 1} fora do fixture`));
           const wrap = h('div', { class: 'pdf-page', 'data-page': pg.n, style: { aspectRatio: `${pg.w} / ${pg.h}` } });
-          wrap.appendChild(h('img', { src: F().PAGES[pg.n], alt: `Datasheet ${FX.source.docId}, página ${pg.n}`, draggable: 'false' }));
+          wrap.appendChild(h('img', { src: F().PAGES[docKey][pg.n], alt: `Datasheet ${FX.source.docId}, página ${pg.n}`, draggable: 'false' }));
           wrap.appendChild(h('span', { class: 'pdf-pn' }, 'p. ' + pg.n));
           F().entities.forEach((e) => {
-            const ev = evOf(e); if (!ev || ev.page !== pg.n) return;
+            const ev = evOf(e); if (!ev || ev.page !== pg.n || e.docKey !== docKey) return;
             const [x0, y0, x1, y1] = ev.box;
             const b = h('button', { type: 'button', class: 'hl k-' + e.kind, 'data-id': e.id, style: { left: x0 * 100 + '%', top: y0 * 100 + '%', width: (x1 - x0) * 100 + '%', height: (y1 - y0) * 100 + '%' }, 'aria-label': e.label + (e.meta ? ', ' + e.meta : '') + ', página ' + pg.n, 'data-tip': e.label, 'data-tip-side': 'top' });
             b.addEventListener('click', () => host.select(e.id, { source: 'canvas', viewer: 'pdf', fromEl: b, morph: e.kind === 'parameter' ? 'value' : 'title' }));
@@ -104,7 +104,12 @@
         el,
         update(ctx) {
           lastCtx = ctx;
+          if (docKey !== ctx.scope.docKey) {
+            docKey = ctx.scope.docKey; FX = F().documents[docKey]; built = false; curPage = FX.pages[0].n;
+            sy.stop(); sx.stop(); hlMap.clear(); pageEls.clear(); pagesEl.replaceChildren(); scroll.scrollTop = 0; scroll.scrollLeft = 0;
+          }
           const go = () => {
+            if (docKey !== ctx.scope.docKey) return;
             layout(); const target = mark(ctx);
             const src = (store.lastOpt || {});
             if (ctx.reason === 'select' && src.viewer !== 'pdf' && target) requestAnimationFrame(() => reveal(target, false));

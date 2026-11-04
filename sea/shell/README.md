@@ -23,7 +23,7 @@ O shell **não conhece o domínio**: recebe conteúdo e seleção por contratos.
 | `SeaAtmosphere` | `src/atmosphere/atmosphere.js` | Luz subaquática, feixes, cáusticas, ondulações, partículas; plugável |
 | utilitários | `util.js` (springs, prefs) · `ui.js` (store, tooltip, menu, toast) · `morph.js` · `palette.js` · `icons.js` | |
 
-Caso de uso (Remora/documentos): `src/demo/` — `fixture.js` (modelo), `viewers/{pdf,table,structure,record}.js`, `inspect.js` (Inspector + ações), `main.js`.
+Caso de uso documental fotovoltaico: `src/demo/` — `fixture.js` (modelo), `viewers/{pdf,table,structure,record}.js`, `inspect.js` (Inspector + ações), `main.js`.
 
 ## Contratos
 
@@ -57,10 +57,11 @@ Gooey: glide de seleção do Explorer e cápsulas da barra flutuante. Morph: ele
 
 ## Dados do caso de uso — real × fixture
 
-- **Real:** datasheet oficial TI **SLFS022K — xx555 Precision Timers (Rev. K)** (`https://www.ti.com/lit/ds/symlink/ne555.pdf`, sha256 em `src/demo/fixture.generated.json`). 24 parâmetros (valores, unidades, nomes, condições) e 4 observações são **copiados da tabela** e localizados no PDF por `tools/prepare_fixture.py`, que **falha** se algum valor não estiver na linha encontrada. 4 das 39 páginas (1, 4, 5, 7) estão renderizadas (120 dpi). Segundo documento (LM358/SLOS068AB, 68 p.): só metadados — serve ao estado vazio.
-- **Fixture (simulado, marcado "fixture" na UI):** estados de classificação/revisão (observado/candidato/aceito/revisar/rejeitado), histórico de revisão, agrupamentos lógicos ("Catálogo", "Temporizadores", "Amplificadores operacionais"), a existência de candidatos e as ações de revisão (em memória; não persistem). **Nada disso é validação executada pelo Remora.**
-- Regerar: `python3 sea/shell/tools/prepare_fixture.py <ne555.pdf>` (precisa de `pdftotext`/`pdftoppm`; o PDF não é versionado).
-- Páginas do datasheet são © Texas Instruments; usadas como material de demonstração.
+- **Fontes verificadas:** Fox ESS [H3 Plus v2.7 de 2025-12-04](https://www.fox-ess.com/Public/Uploads/uploadfile/files/20251204/ENH3PlusDatasheetV2.720251204-904.pdf), SHA-256 `26b171ed52d2d0ea6f0b694f7eed769482ff3587062d90ff555e5a259aced600`; [CQ16/CQ BOX v1.3 de 2025-10-24](https://www.fox-ess.com/Public/Uploads/uploadfile/files/20251203/ENCQ16CQBOXDatasheetV1.320251024.pdf), SHA-256 `d3098bfc10d4f1271a7f57346f6546d2a556ffe7b07f8016a8d7f0af762e688e`.
+- **Dados:** quatro parâmetros de H3-125-Plus e cinco de CQ16/CQ BOX, todos extraídos da página 2 do respectivo documento. As páginas 1 e 2 de cada PDF são renderizadas a 120 dpi. Valores, texto de origem e caixas normalizadas estão em `src/demo/pv.generated.json`. Nenhuma equivalência com códigos comerciais WEG é afirmada.
+- **Fixture:** estados de revisão, agrupamentos e candidatos são simulações, identificadas na interface; nenhum candidato é inicialmente aceito. As páginas são material de demonstração dos respectivos fabricantes.
+- **Regerar:** `python sea/shell/tools/prepare_pv_fixture.py <h3.pdf> <cq16.pdf>` requer `pdfplumber` e `pdftoppm`. O script confere os dois hashes, a linha, o valor e a coluna H3-125-Plus antes de gerar páginas e dados; depois execute o build. PDFs originais não são versionados.
+- O fixture NE555 anterior permanece no histórico e em arquivos legados, mas não é incorporado ao HTML atual.
 
 ## Atalhos
 

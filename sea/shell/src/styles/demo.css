@@ -18,6 +18,7 @@
 .pdf-pn { position: absolute; left: 8px; top: -2px; transform: translateY(-100%); font: 600 11px/14px var(--font); color: var(--text-2); }
 .pdf-gap { width: min(var(--pw), 100%); text-align: center; font-size: 11px; color: var(--text-3); border: 1px dashed var(--line-2); border-radius: 8px; padding: 6px; }
 .hl { position: absolute; border: 1.5px dashed var(--accent-line); border-radius: 3px; background: color-mix(in srgb, var(--accent) 7%, transparent); transition: background-color .15s, box-shadow .2s, border-color .15s; padding: 0; }
+.hl::after { content: ''; position: absolute; inset: -4px; }
 .hl:hover { background: color-mix(in srgb, var(--accent) 18%, transparent); border-style: solid; }
 .hl:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .hl.grp { border-style: solid; background: color-mix(in srgb, var(--accent) 14%, transparent); }

@@ -2,7 +2,8 @@
 /* Validação no navegador (Chromium/Playwright) do artefato FINAL sea/shell/index.html.
  * Roda uma cópia isolada (única peça numa pasta vazia) por file://, com toda rede bloqueada e registrada.
  * Uso: NODE_PATH=$(npm root -g) node sea/shell/tests/validate.cjs   →  escreve tests/RESULTS.md
- * WebGL/GPU não são usados (canvas 2D). Tempos medidos em headless; valores absolutos variam por máquina. */
+ * Usa o renderizador disponível; WebGL e fallback são verificados também em atmosphere.cjs.
+ * Tempos medidos em headless; valores absolutos variam por máquina. */
 const fs = require('fs'), os = require('os'), path = require('path'), crypto = require('crypto');
 const { chromium } = require('playwright');
 const SRC = path.join(__dirname, '..', 'index.html');
@@ -28,6 +29,7 @@ const idle = (p, ms = 6000) => p.waitForFunction(() => !SEA.u.Spring.busy() && !
     const ctx = await browser.newContext({ viewport: { width: opts.w || 1440, height: opts.h || 860 }, colorScheme: opts.scheme || 'dark', reducedMotion: opts.reduced ? 'reduce' : 'no-preference', deviceScaleFactor: 1 });
     await ctx.route('**/*', (r) => { const u = r.request().url(); if (u.startsWith('file:') || u.startsWith('data:') || u.startsWith('blob:')) return r.continue(); net.push(u); return r.abort(); });
     const p = await ctx.newPage();
+    p.setDefaultTimeout(5000);
     p.on('pageerror', (e) => errs.push('pageerror: ' + e.message)); p.on('console', (m) => { if (m.type() === 'error') errs.push('console: ' + m.text()); });
     await p.goto(URL); await p.waitForFunction(() => window.SEA && SEA.app && document.querySelector('.row.sel')); await p.waitForTimeout(700);
     return p;
@@ -49,24 +51,26 @@ const idle = (p, ms = 6000) => p.waitForFunction(() => !SEA.u.Spring.busy() && !
   });
 
   await check('T02', 'Estado inicial: árvore ARIA, seleção sincronizada nos três painéis', async () => {
-    const r = await p.evaluate(() => ({ tree: !!document.querySelector('[role=tree]'), items: document.querySelectorAll('[role=treeitem]').length, selected: document.querySelectorAll('[role=treeitem][aria-selected=true]').length, insp: document.querySelector('.in-title').textContent, hl: !!document.querySelector('.hl.sel'), crumb: document.querySelector('.crumb .cur').textContent }));
-    assert(r.tree && r.items > 20 && r.selected === 1, JSON.stringify(r)); assert(r.hl, 'sem destaque no PDF'); assert(/THRES voltage level/.test(r.insp) && /THRES voltage level/.test(r.crumb), r.insp + ' / ' + r.crumb);
+    const r = await p.evaluate(() => ({ tree: !!document.querySelector('[role=tree]'), items: document.querySelectorAll('[role=treeitem]').length, total:SEA.app.store.all().length, selected: document.querySelectorAll('[role=treeitem][aria-selected=true]').length, insp: document.querySelector('.in-title').textContent, hl: !!document.querySelector('.hl.sel'), crumb: document.querySelector('.crumb .cur').textContent }));
+    assert(r.tree && r.items >= 10 && r.total >= 20 && r.selected === 1, JSON.stringify(r)); assert(r.hl, 'sem destaque no PDF'); assert(/Nominal AC Power/.test(r.insp) && /Nominal AC Power/.test(r.crumb), r.insp + ' / ' + r.crumb);
     return `${r.items} itens na árvore`;
   });
 
   await check('T03', 'Explorer → Canvas/Inspector: clicar no documento troca o contexto', async () => {
-    await p.click('.row[data-id="doc:slfs022k"] .lb'); await p.waitForTimeout(300);
+    await p.click('.row[data-id="doc:h3"] .lb'); await p.waitForTimeout(300);
     const r = await p.evaluate(() => ({ sel: SEA.app.store.selection, kind: document.querySelector('.in').dataset.kind, scope: document.querySelector('.cv-scope-t').textContent, viewer: document.querySelector('.cv-tab.on').id }));
-    assert(r.sel === 'doc:slfs022k' && r.kind === 'document' && /SLFS022K/.test(r.scope), JSON.stringify(r));
+    assert(r.sel === 'doc:h3' && r.kind === 'document' && /H3 Plus/.test(r.scope), JSON.stringify(r));
   });
 
-  await check('T04', 'Estado vazio útil (documento sem páginas no fixture) e retorno', async () => {
-    await p.click('.row[data-id="grp:amp"] .tw'); await p.waitForTimeout(200); await p.click('.row[data-id="doc:slos068ab"] .lb'); await p.waitForTimeout(350);
+  await check('T04', 'Estado vazio útil (sem documento no contexto) e retorno', async () => {
+    const missing=await p.evaluate(()=>{const state=SEA.viewerPdf.supports({scope:{docKey:'missing'},store:SEA.app.store});return {title:state.title,action:typeof state.action?.run};});
+    assert(missing.title==='Sem páginas no fixture' && missing.action==='function',JSON.stringify(missing));
+    await p.click('.row[data-id="sup:fox"] .lb'); await p.waitForTimeout(350);
     let r = await p.evaluate(() => ({ empty: document.querySelector('.cv-state.is-empty p')?.textContent, btn: !!document.querySelector('.cv-state .btn'), stageHidden: document.querySelector('.cv-stage').classList.contains('is-hidden') }));
     assert(r.empty && r.btn && r.stageHidden, JSON.stringify(r));
     await p.click('.cv-state .btn'); await p.waitForTimeout(400);
     r = await p.evaluate(() => ({ sel: SEA.app.store.selection, empty: !!document.querySelector('.cv-state.is-empty:not([hidden])'), vis: !document.querySelector('.cv-stage').classList.contains('is-hidden') }));
-    assert(r.sel === 'doc:slfs022k' && !r.empty && r.vis, JSON.stringify(r)); return r.sel;
+    assert(r.sel === 'doc:h3' && !r.empty && r.vis, JSON.stringify(r)); return r.sel;
   });
 
   await check('T05', 'Troca de viewer sem reconstruir o shell (mesma instância do DOM)', async () => {
@@ -78,44 +82,44 @@ const idle = (p, ms = 6000) => p.waitForFunction(() => !SEA.u.Spring.busy() && !
 
   await check('T06', 'Canvas → Explorer/Inspector: linha da tabela seleciona, árvore acompanha, hero recebe o valor', async () => {
     await p.click('#tab-table'); await p.waitForTimeout(500);
-    await p.click('tr.rw[data-id="par:rec.ta.ne"] td.c-name'); await p.waitForTimeout(900);
+    await p.click('tr.rw[data-id="par:h3.array"] td.c-name'); await p.waitForTimeout(900);
     const r = await p.evaluate(() => { const row = document.querySelector('.row.sel'), tree = document.querySelector('.ex-tree'); const rr = row.getBoundingClientRect(), tr = tree.getBoundingClientRect(); return { sel: SEA.app.store.selection, row: row.dataset.id, inView: rr.top >= tr.top - 1 && rr.bottom <= tr.bottom + 1, hero: document.querySelector('[data-morph=value]')?.textContent, crumb: document.querySelector('.crumb .cur').textContent }; });
-    assert(r.sel === 'par:rec.ta.ne' && r.row === r.sel && r.inView, JSON.stringify(r)); assert(/0\s*…\s*70/.test(r.hero) || /70/.test(r.hero), r.hero); return r.hero;
+    assert(r.sel === 'par:h3.array' && r.row === r.sel && r.inView, JSON.stringify(r)); assert(/250/.test(r.hero), r.hero); return r.hero;
   });
 
   await check('T07', 'Referência à origem: Enter na tabela localiza no PDF (destaque visível na área rolável)', async () => {
     await p.focus('tr.rw.sel'); await p.keyboard.press('Enter'); await p.waitForTimeout(1300);
     const r = await p.evaluate(() => { const hl = document.querySelector('.hl.sel'), sc = document.querySelector('.pdf-scroll'); const a = hl.getBoundingClientRect(), b = sc.getBoundingClientRect(); return { tab: document.querySelector('.cv-tab.on').id, id: hl.dataset.id, vis: a.top >= b.top && a.bottom <= b.bottom && a.left >= b.left && a.right <= b.right, page: hl.closest('.pdf-page').dataset.page }; });
-    assert(r.tab === 'tab-pdf' && r.id === 'par:rec.ta.ne' && r.vis, JSON.stringify(r)); return `página ${r.page}`;
+    assert(r.tab === 'tab-pdf' && r.id === 'par:h3.array' && r.vis, JSON.stringify(r)); return `página ${r.page}`;
   });
 
   await check('T08', 'PDF → seleção: clicar na evidência seleciona o parâmetro e atualiza o Inspector', async () => {
-    await p.click('.hl[data-id="par:th.rja.p"]', { force: true }); await p.waitForTimeout(500);
+    await p.click('.hl[data-id="par:h3.current"]', { force: true }); await p.waitForTimeout(500);
     const r = await p.evaluate(() => ({ sel: SEA.app.store.selection, title: document.querySelector('.in-title').textContent, hero: document.querySelector('[data-morph=value]').textContent }));
-    assert(r.sel === 'par:th.rja.p' && /thermal resistance/.test(r.title) && /98\.5/.test(r.hero), JSON.stringify(r)); return r.hero;
+    assert(r.sel === 'par:h3.current' && /Rated AC Output Current/.test(r.title) && /190/.test(r.hero), JSON.stringify(r)); return r.hero;
   });
 
   await check('T09', 'Revisão por teclado (A/X/R): estado muda em Explorer, Canvas e Inspector; desfazer restaura', async () => {
     await p.click('#tab-class'); await p.waitForTimeout(700);
-    await p.click('.st-world .st-n[data-id="mod:SE555"]'); await p.waitForTimeout(400);
-    assert((await sel(p)) === 'mod:SE555'); const laneBefore = await p.getAttribute('.st-world .st-n[data-id="mod:SE555"]', 'data-lane');
-    await p.locator('.st-world .st-n[data-id="mod:SE555"]').focus(); await p.keyboard.press('a'); await p.waitForTimeout(700);
-    const after = await p.evaluate(() => ({ st: SEA.app.store.get('mod:SE555').state, lane: document.querySelector('.st-world .st-n[data-id="mod:SE555"]').dataset.lane, chip: document.querySelector('.row[data-id="mod:SE555"] .chip')?.className, insp: document.querySelector('.in-chip .chip-t')?.textContent }));
+    await p.click('.st-world .st-n[data-id="mod:H3-125-Plus"]'); await p.waitForTimeout(400);
+    assert((await sel(p)) === 'mod:H3-125-Plus'); const laneBefore = await p.getAttribute('.st-world .st-n[data-id="mod:H3-125-Plus"]', 'data-lane');
+    await p.locator('.st-world .st-n[data-id="mod:H3-125-Plus"]').focus(); await p.keyboard.press('a'); await p.waitForTimeout(700);
+    const after = await p.evaluate(() => ({ st: SEA.app.store.get('mod:H3-125-Plus').state, lane: document.querySelector('.st-world .st-n[data-id="mod:H3-125-Plus"]').dataset.lane, chip: document.querySelector('.row[data-id="mod:H3-125-Plus"] .chip')?.className, insp: document.querySelector('.in-chip .chip-t')?.textContent }));
     assert(laneBefore === '1' && after.st === 'acc' && after.lane === '2' && /positive/.test(after.chip) && after.insp === 'Aceito', JSON.stringify(after));
     await p.click('.toast-b'); await p.waitForTimeout(700);
-    const back = await p.evaluate(() => ({ st: SEA.app.store.get('mod:SE555').state, lane: document.querySelector('.st-world .st-n[data-id="mod:SE555"]').dataset.lane }));
-    assert(back.st === 'rev' && back.lane === '1', JSON.stringify(back)); return 'rev → acc → rev; faixa 1 → 2 → 1';
+    const back = await p.evaluate(() => ({ st: SEA.app.store.get('mod:H3-125-Plus').state, lane: document.querySelector('.st-world .st-n[data-id="mod:H3-125-Plus"]').dataset.lane }));
+    assert(back.st === 'cand' && back.lane === '1', JSON.stringify(back)); return 'cand → acc → cand; faixa 1 → 2 → 1';
   });
 
   await check('T10', 'Morph: um fantasma por vez, interrompível, destino visível ao final', async () => {
-    await p.evaluate(() => SEA.app.store.select('par:rec.io', { source: 'palette' })); await p.click('#tab-table'); await p.waitForTimeout(600);
-    await p.click('tr.rw[data-id="par:el.thres5"] td.c-n:nth-of-type(5)'); await p.waitForTimeout(40);
+    await p.evaluate(() => SEA.app.store.select('par:h3.ac', { source: 'palette' })); await p.click('#tab-table'); await p.waitForTimeout(600);
+    await p.click('tr.rw[data-id="par:h3.array"] td.c-n:nth-of-type(5)'); await p.waitForTimeout(40);
     const during = await p.evaluate(() => document.querySelectorAll('.ghost').length);
-    await p.click('tr.rw[data-id="par:el.trig15"] td.c-name', { delay: 0 }); await p.waitForTimeout(50);
+    await p.click('tr.rw[data-id="par:h3.current"] td.c-name', { delay: 0 }); await p.waitForTimeout(50);
     const mid = await p.evaluate(() => document.querySelectorAll('.ghost').length);
-    await p.click('tr.rw[data-id="par:el.trig5"] td.c-name'); const tM = Date.now(); await idle(p); const settleMs = Date.now() - tM; await p.waitForTimeout(60);
+    await p.click('tr.rw[data-id="par:h3.trackers"] td.c-name'); const tM = Date.now(); await idle(p); const settleMs = Date.now() - tM; await p.waitForTimeout(60);
     const end = await p.evaluate(() => ({ ghosts: document.querySelectorAll('.ghost').length, vis: getComputedStyle(document.querySelector('[data-morph=value]')).visibility, sel: SEA.app.store.selection, hero: document.querySelector('[data-morph=value]').textContent }));
-    assert(during <= 1 && mid <= 1, `fantasmas ${during}/${mid}`); assert(end.ghosts === 0 && end.vis === 'visible' && end.sel === 'par:el.trig5' && /1\.67/.test(end.hero), JSON.stringify(end)); return `fantasmas durante=${during}, interrompido=${mid}, final=${end.ghosts}; assentou em ${settleMs} ms`;
+    assert(during <= 1 && mid <= 1, `fantasmas ${during}/${mid}`); assert(end.ghosts === 0 && end.vis === 'visible' && end.sel === 'par:h3.trackers' && /8/.test(end.hero), JSON.stringify(end)); return `fantasmas durante=${during}, interrompido=${mid}, final=${end.ghosts}; assentou em ${settleMs} ms`;
   });
 
   await check('T11', 'Teclado na árvore: setas, Home/End, →/←, Enter, digitação', async () => {
@@ -125,17 +129,17 @@ const idle = (p, ms = 6000) => p.waitForFunction(() => !SEA.u.Spring.busy() && !
     await p.keyboard.press('Home'); assert((await f()) === 'grp:cat', 'Home'); await p.keyboard.press('End'); const last = await f(); assert(last && last !== 'grp:cat', 'End ' + last);
     await p.keyboard.press('Home'); await p.keyboard.press('ArrowLeft'); await p.waitForTimeout(200); assert((await p.getAttribute('.row[data-id="grp:cat"]', 'aria-expanded')) === 'false', 'recolher');
     await p.keyboard.press('ArrowRight'); await p.waitForTimeout(250); assert((await p.getAttribute('.row[data-id="grp:cat"]', 'aria-expanded')) === 'true', 'expandir');
-    await p.keyboard.press('ArrowDown'); await p.keyboard.press('ArrowDown'); await p.keyboard.type('NE5'); assert((await f()) === 'mod:NE555' || /NE555/.test(await p.evaluate(() => document.activeElement.textContent)), 'typeahead ' + await f());
-    await p.keyboard.press('Enter'); await p.waitForTimeout(300); assert((await sel(p)) === 'mod:NE555', 'Enter seleciona'); return 'ok';
+    await p.keyboard.press('ArrowDown'); await p.keyboard.press('ArrowDown'); await p.keyboard.type('H3-125'); assert((await f()) === 'mod:H3-125-Plus' || /H3-125-Plus/.test(await p.evaluate(() => document.activeElement.textContent)), 'typeahead ' + await f());
+    await p.keyboard.press('Enter'); await p.waitForTimeout(300); assert((await sel(p)) === 'mod:H3-125-Plus', 'Enter seleciona'); return 'ok';
   });
 
   await check('T12', 'Busca e filtros compactos', async () => {
-    await p.fill('.ex-in', 'thres'); await p.waitForTimeout(250);
-    let r = await p.evaluate(() => ({ n: document.querySelectorAll('.row').length, leaf: [...document.querySelectorAll('.row.leaf')].every((x) => /thres/i.test(x.textContent)), count: document.querySelector('.ex-count').textContent }));
+    await p.fill('.ex-in', 'power'); await p.waitForTimeout(250);
+    let r = await p.evaluate(() => ({ n: document.querySelectorAll('.row').length, leaf: [...document.querySelectorAll('.row.leaf')].every((x) => /power/i.test(x.textContent)), count: document.querySelector('.ex-count').textContent }));
     assert(r.n < 15 && r.leaf, JSON.stringify(r)); await p.fill('.ex-in', ''); await p.waitForTimeout(150);
-    await p.click('.ex-f[aria-label="Estado: Aceito"]'); await p.waitForTimeout(250);
+    await p.click('.ex-f[aria-label="Estado: Observado"]'); await p.waitForTimeout(250);
     r = await p.evaluate(() => ({ leaves: [...document.querySelectorAll('.row.leaf')].map((x) => x.dataset.id) }));
-    assert(r.leaves.length >= 2 && r.leaves.includes('mod:NE555') && r.leaves.includes('par:rec.ta.ne'), JSON.stringify(r)); await p.click('.ex-f[aria-label="Estado: Aceito"]'); await p.waitForTimeout(200);
+    assert(r.leaves.length >= 2 && r.leaves.includes('par:h3.ac') && r.leaves.includes('par:h3.array'), JSON.stringify(r)); await p.click('.ex-f[aria-label="Estado: Observado"]'); await p.waitForTimeout(200);
     await p.fill('.ex-in', 'zzzz'); await p.waitForTimeout(200); assert(await p.isVisible('.ex-empty'), 'estado vazio'); await p.fill('.ex-in', ''); return 'filtro por texto/estado/vazio';
   });
 
@@ -163,19 +167,19 @@ const idle = (p, ms = 6000) => p.waitForFunction(() => !SEA.u.Spring.busy() && !
   });
 
   await check('T15', 'Inspector: recolhe/expande, grupos preservam estado entre seleções', async () => {
-    await p.evaluate(() => SEA.app.store.select('par:rec.io', { source: 'palette' })); await p.waitForTimeout(300); await p.click('.sx[data-id="p-md"] .sx-h');
-    await p.click('#tab-table'); await p.click('tr.rw[data-id="par:el.reset"] td.c-name'); await p.waitForTimeout(500);
+    await p.evaluate(() => SEA.app.store.select('par:h3.ac', { source: 'palette' })); await p.waitForTimeout(300); await p.click('.sx[data-id="p-md"] .sx-h');
+    await p.click('#tab-table'); await p.click('tr.rw[data-id="par:h3.array"] td.c-name'); await p.waitForTimeout(500);
     const open = await p.evaluate(() => document.querySelector('.sx[data-id="p-md"]')?.classList.contains('open')); assert(open, 'seção Metadados deveria permanecer aberta');
     await p.click('.in-h .ib[aria-label="Recolher Inspector"]'); await idle(p); const w1 = await w('.in'); assert(w1 <= 44, 'recolhido ' + w1);
-    const sel0 = await sel(p); await p.click('.ex-tree .row[data-id="par:el.trig15"] .lb'); await idle(p);
+    const sel0 = await sel(p); await p.click('.ex-tree .row[data-id="par:h3.current"] .lb'); await idle(p);
     assert((await w('.in')) <= 44, 'recolhido pelo usuário não deve reabrir sozinho'); assert(await p.evaluate(() => document.querySelector('.in').classList.contains('pulse')), 'sem sinal de atividade');
     await p.click('.in-rail .ib'); await idle(p); assert((await w('.in')) > 250, 'reabrir'); await p.click('.sx[data-id="p-md"] .sx-h'); return `recolhido ${w1}px → ${await w('.in')}px`;
   });
 
   await check('T16', 'Palette (Ctrl+K): busca, navegação por teclado, Enter seleciona, Esc devolve o foco', async () => {
     await p.locator('.tb-search').focus(); await p.keyboard.press('Control+k'); await p.waitForSelector('.pal-in'); assert(await p.evaluate(() => document.activeElement.classList.contains('pal-in')), 'foco');
-    await p.keyboard.type('se555'); await p.waitForTimeout(150); const first = await p.evaluate(() => document.querySelector('.pal-i.on .pal-l').textContent); assert(first === 'SE555', first);
-    await p.keyboard.press('Enter'); await p.waitForTimeout(400); assert((await sel(p)) === 'mod:SE555', 'seleção');
+    await p.keyboard.type('h3-125-plus'); await p.waitForTimeout(150); const first = await p.evaluate(() => document.querySelector('.pal-i.on .pal-l').textContent); assert(first === 'H3-125-Plus', first);
+    await p.keyboard.press('Enter'); await p.waitForTimeout(400); assert((await sel(p)) === 'mod:H3-125-Plus', 'seleção');
     await p.keyboard.press('Control+k'); await p.waitForSelector('.pal-in'); await p.keyboard.press('ArrowDown'); await p.keyboard.press('Escape'); await p.waitForTimeout(200);
     assert(!(await p.$('.pal-wrap')), 'fechou'); return 'ok';
   });
@@ -189,7 +193,7 @@ const idle = (p, ms = 6000) => p.waitForFunction(() => !SEA.u.Spring.busy() && !
   });
 
   await check('T18', 'Actionbar flutuante reposiciona para não cobrir a seleção (e volta)', async () => {
-    await p.evaluate(() => SEA.app.store.select('par:abs.vcc', { source: 'palette' })); await p.click('#tab-pdf'); await p.waitForTimeout(1500);
+    await p.evaluate(() => SEA.app.store.select('par:cq.energy', { source: 'palette' })); await p.click('#tab-pdf'); await p.waitForTimeout(1500);
     const pos0 = await p.getAttribute('.ab-float', 'data-pos');
     await p.evaluate(() => { const sc = document.querySelector('.pdf-scroll'), hl = document.querySelector('.hl.sel'), b = document.querySelector('.cv-body').getBoundingClientRect(); const a = hl.getBoundingClientRect(); sc.scrollTop += a.top - (b.bottom - 50); });
     await p.waitForTimeout(900); const pos1 = await p.getAttribute('.ab-float', 'data-pos');
@@ -228,12 +232,12 @@ const idle = (p, ms = 6000) => p.waitForFunction(() => !SEA.u.Spring.busy() && !
   });
 
   await check('T22', 'Persistência local: layout, tema, viewer e seleção sobrevivem ao recarregamento', async () => {
-    await p.click('#tab-table'); await p.waitForTimeout(500); await p.click('tr.rw[data-id="par:rec.io"] td.c-name'); await p.waitForTimeout(300);
+    await p.evaluate(() => SEA.app.store.select('par:h3.ac', { source: 'palette' })); await p.click('#tab-table'); await p.waitForTimeout(500); await p.click('tr.rw[data-id="par:h3.ac"] td.c-name'); await p.waitForTimeout(300);
     await p.locator('.rz-ex').focus(); await p.keyboard.press('ArrowRight'); await p.keyboard.press('ArrowRight'); await idle(p); const exW = await w('.ex');
     await p.keyboard.press('Control+Shift+L'); await p.waitForTimeout(500); const th = await p.evaluate(() => document.documentElement.dataset.theme); await p.waitForTimeout(400);
     await p.reload(); await p.waitForFunction(() => window.SEA && SEA.app && document.querySelector('.row.sel')); await p.waitForTimeout(900);
     const r = await p.evaluate(() => ({ th: document.documentElement.dataset.theme, tab: document.querySelector('.cv-tab.on').id, sel: SEA.app.store.selection, ex: Math.round(document.querySelector('.ex').getBoundingClientRect().width) }));
-    assert(r.th === th && r.tab === 'tab-table' && r.sel === 'par:rec.io' && Math.abs(r.ex - exW) <= 2, JSON.stringify(r) + ' esperado ' + th + '/' + exW); return `tema ${r.th}, aba ${r.tab}, Explorer ${r.ex}px`;
+    assert(r.th === th && r.tab === 'tab-table' && r.sel === 'par:h3.ac' && Math.abs(r.ex - exW) <= 2, JSON.stringify(r) + ' esperado ' + th + '/' + exW); return `tema ${r.th}, aba ${r.tab}, Explorer ${r.ex}px`;
   });
   await p.context().close();
 
@@ -251,8 +255,8 @@ const idle = (p, ms = 6000) => p.waitForFunction(() => !SEA.u.Spring.busy() && !
     const r0 = await p.evaluate(() => ({ mode: document.querySelector('.ws').dataset.mode, peek: document.querySelector('.in').dataset.sheet, h: Math.round(document.querySelector('.in').getBoundingClientRect().height), ox: document.documentElement.scrollWidth <= innerWidth }));
     assert(r0.mode === 'narrow' && r0.peek === 'peek' && r0.h === 64 && r0.ox, JSON.stringify(r0));
     await p.click('.tb .ib[aria-label="Explorer"]'); await p.waitForTimeout(800); const d = await p.evaluate(() => { const r = document.querySelector('.ex').getBoundingClientRect(); return { l: Math.round(r.left), w: Math.round(r.width), inert: document.querySelector('.ex').hasAttribute('inert') }; }); assert(d.l >= 0 && d.w > 250 && !d.inert, JSON.stringify(d));
-    await p.click('.row[data-id="mod:NE555"] .lb'); await p.waitForTimeout(800);
-    const r1 = await p.evaluate(() => ({ sel: SEA.app.store.selection, drawerClosed: document.querySelector('.ex').getBoundingClientRect().right <= 0 || document.querySelector('.ex').hasAttribute('inert'), title: document.querySelector('.in-title').textContent })); assert(r1.sel === 'mod:NE555' && r1.drawerClosed && r1.title === 'NE555', JSON.stringify(r1));
+    await p.click('.row[data-id="mod:H3-125-Plus"] .lb'); await p.waitForTimeout(800);
+    const r1 = await p.evaluate(() => ({ sel: SEA.app.store.selection, drawerClosed: document.querySelector('.ex').getBoundingClientRect().right <= 0 || document.querySelector('.ex').hasAttribute('inert'), title: document.querySelector('.in-title').textContent })); assert(r1.sel === 'mod:H3-125-Plus' && r1.drawerClosed && r1.title === 'H3-125-Plus', JSON.stringify(r1));
     await p.click('.in-h'); await p.waitForTimeout(900); const h1 = await p.evaluate(() => Math.round(document.querySelector('.in').getBoundingClientRect().height)); assert(h1 > 300, 'sheet aberto ' + h1);
     const act = await p.evaluate(() => !!document.querySelector('.in .ab button')); assert(act, 'ações no sheet'); await p.click('.in-h'); await p.waitForTimeout(800);
     const bar = await p.evaluate(() => { const b = document.querySelector('.ab-float').getBoundingClientRect(), t = document.querySelector('.cv-h').getBoundingClientRect(); return { ok: b.top >= t.bottom - 1 && b.right <= innerWidth && b.left >= 0 }; }); assert(bar.ok, 'barra flutuante fora da área'); return `peek 64px → sheet ${h1}px; drawer ${d.w}px`;
@@ -265,7 +269,7 @@ const idle = (p, ms = 6000) => p.waitForFunction(() => !SEA.u.Spring.busy() && !
     const px = () => p.evaluate(() => { const c = document.querySelector('.atmo-cv'); const gl = c.getContext('webgl'); let d; if (gl) { d = new Uint8Array(c.width * c.height * 4); gl.readPixels(0, 0, c.width, c.height, gl.RGBA, gl.UNSIGNED_BYTE, d); } else d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data; let h = 0; for (let i = 0; i < d.length; i += 97) h = (h * 31 + d[i]) | 0; return h; });
     const h0 = await px(); await p.waitForTimeout(900); const h1 = await px();
     await p.keyboard.press('Control+b'); await p.waitForTimeout(80); const ex = await w('.ex');
-    await p.click('.row[data-id="par:rec.io"] .lb').catch(() => {}); await p.waitForTimeout(30); const gh = await p.evaluate(() => document.querySelectorAll('.ghost').length);
+    await p.click('.row[data-id="par:h3.ac"] .lb').catch(() => {}); await p.waitForTimeout(30); const gh = await p.evaluate(() => document.querySelectorAll('.ghost').length);
     assert(r0.red && !r0.run && h0 === h1, JSON.stringify({ r0, h0, h1 })); assert(ex <= 44, 'painel deveria estar no destino imediatamente: ' + ex); assert(gh === 0, 'morph não deve voar'); return 'atmosfera idêntica após 900 ms; painel no destino em ≤ 80 ms';
   });
   await p.context().close();
@@ -310,16 +314,16 @@ const idle = (p, ms = 6000) => p.waitForFunction(() => !SEA.u.Spring.busy() && !
     assert(i1 >= 440 && c1 >= 440, `alargado ${i0}->${i1} canvas ${c1}`); await p.click('.in-h .ib[aria-label="Reduzir Inspector"]'); await idle(p); const i2 = await w('.in'); assert(Math.abs(i2 - i0) <= 2, `restaurou ${i2} vs ${i0}`); return `Inspector ${i0}→${i1}→${i2}px; Canvas ${c0}→${c1}px`;
   });
   await check('T31', 'Acompanhar seleção: ligado revela na árvore; desligado não move a árvore', async () => {
-    await p.click('.row[data-id="grp:amp"] .tw'); await p.waitForTimeout(150); await p.click('.row[data-id="grp:amp"] .tw'); await p.waitForTimeout(150);   // garante recolhido
-    await p.evaluate(() => SEA.app.store.select('par:rec.io', { source: 'palette' })); await p.waitForTimeout(500);
-    const on = await p.evaluate(() => document.querySelector('.row[data-id="par:rec.io"]') && document.querySelector('.row.sel')?.dataset.id);
-    assert(on === 'par:rec.io', 'deveria revelar com follow ligado: ' + on);
+    await p.click('.row[data-id="fam:cq"] .tw'); await p.waitForTimeout(150); await p.click('.row[data-id="fam:cq"] .tw'); await p.waitForTimeout(150);   // garante recolhido
+    await p.evaluate(() => SEA.app.store.select('par:h3.ac', { source: 'palette' })); await p.waitForTimeout(500);
+    const on = await p.evaluate(() => document.querySelector('.row[data-id="par:h3.ac"]') && document.querySelector('.row.sel')?.dataset.id);
+    assert(on === 'par:h3.ac', 'deveria revelar com follow ligado: ' + on);
     await p.click('.px-h .ib[aria-label="Acompanhar seleção"]'); await p.evaluate(() => { SEA.app.explorer.input.value = ''; });
-    await p.click('.row[data-id="sec:5.3"] .tw'); await p.waitForTimeout(150);   // recolhe a seção da seleção
-    await p.evaluate(() => SEA.app.store.select('par:rec.vcc', { source: 'palette' })); await p.waitForTimeout(500);
-    const off = await p.evaluate(() => ({ hasRow: !!document.querySelector('.row[data-id="par:rec.vcc"]'), ctx: !!document.querySelector('.row.ctx') || !!document.querySelector('.glide.hide') || true, sel: SEA.app.store.selection }));
-    assert(!off.hasRow && off.sel === 'par:rec.vcc', 'follow desligado não deve expandir: ' + JSON.stringify(off));
-    await p.click('.px-h .ib[aria-label="Acompanhar seleção"]'); await p.waitForTimeout(600); assert(await p.evaluate(() => !!document.querySelector('.row[data-id="par:rec.vcc"]')), 'religar revela'); return 'ok';
+    await p.click('.row[data-id="sec:h3:AC OUTPUT (GRID)"] .tw'); await p.waitForTimeout(150);   // recolhe a seção da seleção
+    await p.evaluate(() => SEA.app.store.select('par:h3.current', { source: 'palette' })); await p.waitForTimeout(500);
+    const off = await p.evaluate(() => ({ hasRow: !!document.querySelector('.row[data-id="par:h3.current"]'), ctx: !!document.querySelector('.row.ctx') || !!document.querySelector('.glide.hide') || true, sel: SEA.app.store.selection }));
+    assert(!off.hasRow && off.sel === 'par:h3.current', 'follow desligado não deve expandir: ' + JSON.stringify(off));
+    await p.click('.px-h .ib[aria-label="Acompanhar seleção"]'); await p.waitForTimeout(600); assert(await p.evaluate(() => !!document.querySelector('.row[data-id="par:h3.current"]')), 'religar revela'); return 'ok';
   });
   await check('T32', 'Robustez: toda entidade × todo viewer renderiza sem erro; Inspector e breadcrumb coerentes', async () => {
     const before = errs.length; const ids = await p.evaluate(() => SEA.app.store.all().map((e) => e.id)); let n = 0;
@@ -331,6 +335,53 @@ const idle = (p, ms = 6000) => p.waitForFunction(() => !SEA.u.Spring.busy() && !
       assert(r.title === r.label && r.crumb === r.label, `${v}: ${JSON.stringify(r)}`);
     }
     assert(errs.length === before, errs.slice(before).join(' | ')); return `${n} seleções (${ids.length} entidades × 4 viewers)`;
+  });
+  await p.context().close();
+
+  p = await open();
+  await check('T33', 'H3 ↔ CQ16: tabela → origem e evidência → Explorer/Inspector sem cruzamento', async () => {
+    for (const test of [
+      {doc:'h3', first:'par:h3.array', next:'par:h3.current', value:'190', label:'Rated AC Output Current', revision:'2.7'},
+      {doc:'cq', first:'par:cq.energy', next:'par:cq.voltage', value:'51.2', label:'Nominal Voltage', revision:'1.3'},
+      {doc:'cq', first:'par:cq.box.voltage', next:'par:cq.capacity', value:'314', label:'Nominal Capacity', revision:'1.3'},
+      {doc:'h3', first:'par:h3.ac', next:'par:h3.trackers', value:'8', label:'No. of MPP Trackers', revision:'2.7'},
+    ]) {
+      await p.evaluate(id => SEA.app.store.select(id,{source:'palette'}),test.first);
+      await p.evaluate(() => SEA.app.host.setViewer('table',true)); await p.waitForTimeout(600);
+      const ids = await p.locator('tr.rw').evaluateAll(rows=>rows.map(r=>r.dataset.id));
+      assert(ids.includes(test.first) && ids.every(id=>id.startsWith('par:'+test.doc+'.')), JSON.stringify({test,ids}));
+      await p.click(`tr.rw[data-id="${test.first}"] td.c-name`); await p.focus(`tr.rw[data-id="${test.first}"]`); await p.keyboard.press('Enter'); await p.waitForTimeout(1000);
+      const first = await p.evaluate(() => ({id:document.querySelector('.hl.sel')?.dataset.id,page:document.querySelector('.hl.sel')?.closest('.pdf-page')?.dataset.page,images:[...document.querySelectorAll('.pdf-page img')].map(i=>i.alt),ids:[...document.querySelectorAll('.hl')].map(i=>i.dataset.id)}));
+      assert(first.id===test.first && first.page==='2' && first.ids.every(id=>id.startsWith('par:'+test.doc+'.')) && first.images.every(i=>i.includes(test.doc.toUpperCase())),JSON.stringify(first));
+      const nextHighlight=p.locator(`.hl[data-id="${test.next}"]`); await p.locator('.pdf-scroll').dispatchEvent('pointerdown',{pointerType:'mouse'}); await nextHighlight.evaluate(e=>e.scrollIntoView({block:'center',inline:'nearest',behavior:'instant'})); await p.waitForTimeout(500); await nextHighlight.click(); await p.waitForTimeout(700);
+      const r = await p.evaluate(()=>({selection:SEA.app.store.selection,tree:document.querySelector('.row.sel')?.dataset.id,title:document.querySelector('.in-title')?.textContent,hero:document.querySelector('[data-morph=value]')?.textContent,origin:document.querySelector('.in-body')?.textContent,crop:!!document.querySelector('.in-body .crop img')}));
+      assert(r.selection===test.next && r.tree===test.next && r.title.includes(test.label) && r.hero.includes(test.value) && r.origin.includes(test.revision) && r.crop,JSON.stringify(r));
+      await p.click('#tab-table'); await p.waitForTimeout(500);
+      assert(await p.evaluate(id=>document.querySelector('tr.rw.sel')?.dataset.id===id,test.next),'seleção não preservada na tabela');
+    }
+    return 'H3 → CQ16 → H3; páginas, evidências e seleção isoladas';
+  });
+  await p.context().close();
+
+  p = await open({w:390,h:800,reduced:true});
+  await check('T34', 'Proveniência nos dois documentos em viewport estreito, por teclado e com movimento reduzido', async () => {
+    for (const id of ['par:cq.energy','par:h3.ac']) {
+      await p.evaluate(i=>{SEA.app.store.select(i,{source:'palette'}); SEA.app.host.setViewer('table',true);},id);
+      await p.waitForTimeout(700); await p.focus(`tr.rw[data-id="${id}"]`); await p.keyboard.press('Enter'); await p.waitForTimeout(800);
+      const r=await p.evaluate(()=>({selection:SEA.app.store.selection,tab:document.querySelector('.cv-tab.on')?.id,hl:document.querySelector('.hl.sel')?.dataset.id,viewport:document.documentElement.scrollWidth<=innerWidth,reduced:SEA.motion.reduced,ghosts:document.querySelectorAll('.ghost').length}));
+      assert(r.selection===id && r.tab==='tab-pdf' && r.hl===id && r.viewport && r.reduced && !r.ghosts,JSON.stringify(r));
+    }
+    return 'CQ16 e H3: Enter localiza evidência; sem overflow ou voo';
+  });
+  await p.context().close();
+
+  p = await open();
+  await check('T35', 'Fontes, variantes, valores e coordenadas dos dois documentos', async () => {
+    const data=await p.evaluate(()=>Object.values(SEA.fixture.documents).map(d=>({key:d.key,hash:d.source.sha256,revision:d.source.revision,pages:d.pages.map(p=>p.n),params:d.params.map(p=>({id:p.id,value:p.typ,excerpt:p.evidence.excerpt,box:p.evidence.box,page:p.evidence.page,applies:p.applies,document:p.document}))})));
+    const expected={h3:'26b171ed52d2d0ea6f0b694f7eed769482ff3587062d90ff555e5a259aced600',cq:'d3098bfc10d4f1271a7f57346f6546d2a556ffe7b07f8016a8d7f0af762e688e'};
+    assert(data.length===2,JSON.stringify(data));
+    for(const d of data){assert(d.hash===expected[d.key] && d.pages.join(',')==='1,2' && d.params.length>0,JSON.stringify(d));for(const p of d.params){assert(p.document===d.key && p.page===2 && p.excerpt.includes(p.value) && p.box.length===4 && p.box.every(x=>x>=0&&x<=1) && p.box[0]<p.box[2] && p.box[1]<p.box[3],JSON.stringify(p));assert(d.key==='h3'?p.applies[0]==='H3-125-Plus':['CQ16','CQ BOX'].includes(p.applies[0]),JSON.stringify(p));}}
+    return data.map(d=>`${d.key}: ${d.params.length} parâmetros`).join('; ');
   });
   await p.context().close();
 

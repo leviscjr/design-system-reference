@@ -10,12 +10,12 @@
   SEA.viewerStructure = {
     id: 'class', label: 'Classificação', icon: 'graph', interaction: 'pan-zoom',
     supports(ctx) {
-      if (!ctx.scope || ctx.scope.id !== F().DOC) return { icon: 'graph', title: 'Sem classificação neste contexto', action: { label: 'Abrir datasheet', run: () => ctx.store.select(F().DOC, { source: 'canvas' }) } };
+      if (!ctx.scope || !F().documents[ctx.scope.docKey]) return { icon: 'graph', title: 'Sem classificação neste contexto', action: { label: 'Abrir datasheet', run: () => ctx.store.select(F().DOC, { source: 'canvas' }) } };
       return true;
     },
     create(host) {
       const { store } = host, FX = F();
-      const order = ['obs:docid', 'obs:subject', 'obs:family', 'obs:models', 'obs:maker', 'cand:type', 'sup:ti', 'fam:xx555', FX.DOC, 'mod:NA555', 'mod:SA555', 'mod:SE555', 'mod:NE555'];
+      let order = [], docKey = null;
       const lane = (e) => (e.state === 'obs' ? 0 : e.state === 'acc' ? 2 : 1);
       const view = { x: 0, y: 0, k: 1 };
       let selId = null, fitted = false, W = 1000, H = 600, drag = null;
@@ -113,6 +113,7 @@
       return {
         el,
         update(ctx) {
+          if (docKey !== ctx.scope.docKey) { docKey = ctx.scope.docKey; nodes.forEach(n=>n.remove()); nodes.clear(); order = FX.entities.filter(e=>e.docKey===docKey && ['observation','candidate','family','document','model'].includes(e.kind)).map(e=>e.id); fitted=false; }
           if (ctx.reason === 'state' || !nodes.size) layout(); else mark();
           if (ctx.reason === 'select' && selId && (store.lastOpt || {}).viewer !== 'class') reveal(selId);
         },

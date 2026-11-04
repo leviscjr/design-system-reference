@@ -1,0 +1,304 @@
+{
+  "documents": [
+    {
+      "key": "h3",
+      "label": "H3 Plus · datasheet",
+      "models": [
+        "H3-125-Plus"
+      ],
+      "params": [
+        {
+          "id": "h3.ac",
+          "section": "AC OUTPUT (GRID)",
+          "name": "Nominal AC Power",
+          "symbol": "",
+          "applies": [
+            "H3-125-Plus"
+          ],
+          "condition": "Nominal",
+          "min": "",
+          "typ": "125",
+          "max": "",
+          "unit": "kW",
+          "document": "h3",
+          "evidence": {
+            "page": 2,
+            "box": [
+              0.896392,
+              0.295314,
+              0.911723,
+              0.302741
+            ],
+            "excerpt": "Nominal AC Power [kW] 50 60 75 80 100 125"
+          }
+        },
+        {
+          "id": "h3.array",
+          "section": "PV INPUT",
+          "name": "Max. Array Power",
+          "symbol": "",
+          "applies": [
+            "H3-125-Plus"
+          ],
+          "condition": "Máximo",
+          "min": "",
+          "typ": "250",
+          "max": "",
+          "unit": "kW",
+          "document": "h3",
+          "evidence": {
+            "page": 2,
+            "box": [
+              0.896392,
+              0.087086,
+              0.911723,
+              0.094513
+            ],
+            "excerpt": "Max. Array Power [kW] 100 120 150 160 200 250"
+          }
+        },
+        {
+          "id": "h3.current",
+          "section": "AC OUTPUT (GRID)",
+          "name": "Rated AC Output Current (Per Phase)",
+          "symbol": "",
+          "applies": [
+            "H3-125-Plus"
+          ],
+          "condition": "Por fase",
+          "min": "",
+          "typ": "190",
+          "max": "",
+          "unit": "A",
+          "document": "h3",
+          "evidence": {
+            "page": 2,
+            "box": [
+              0.896392,
+              0.320075,
+              0.911723,
+              0.327502
+            ],
+            "excerpt": "Rated AC Output Current (Per Phase) [A] 76 91.2 113.9 121.6 152 190"
+          }
+        },
+        {
+          "id": "h3.trackers",
+          "section": "PV INPUT",
+          "name": "No. of MPP Trackers",
+          "symbol": "",
+          "applies": [
+            "H3-125-Plus"
+          ],
+          "condition": "",
+          "min": "",
+          "typ": "8",
+          "max": "",
+          "unit": "",
+          "document": "h3",
+          "evidence": {
+            "page": 2,
+            "box": [
+              0.901503,
+              0.186116,
+              0.906613,
+              0.193543
+            ],
+            "excerpt": "No. of MPP Trackers 4 4 8 8 8 8"
+          }
+        }
+      ],
+      "pages": [
+        {
+          "n": 1,
+          "w": 595.276,
+          "h": 807.874,
+          "img": "pv-pages/h3-01.jpg"
+        },
+        {
+          "n": 2,
+          "w": 595.276,
+          "h": 807.874,
+          "img": "pv-pages/h3-02.jpg"
+        }
+      ],
+      "source": {
+        "title": "EN-H3-Plus-Datasheet-V2.7-20251204",
+        "docId": "H3",
+        "revision": "2.7 · 2025-12-04",
+        "pages": 2,
+        "sha256": "26b171ed52d2d0ea6f0b694f7eed769482ff3587062d90ff555e5a259aced600",
+        "bytes": 594911,
+        "url": "https://www.fox-ess.com/Public/Uploads/uploadfile/files/20251204/ENH3PlusDatasheetV2.720251204-904.pdf",
+        "manufacturer": "Fox ESS",
+        "renderedPages": [
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "key": "cq",
+      "label": "CQ16 / CQ BOX · datasheet",
+      "models": [
+        "CQ16",
+        "CQ BOX"
+      ],
+      "params": [
+        {
+          "id": "cq.box.voltage",
+          "section": "CQ BOX",
+          "name": "Voltage Range [Vdc]",
+          "symbol": "",
+          "applies": [
+            "CQ BOX"
+          ],
+          "condition": "Faixa operacional",
+          "min": "",
+          "typ": "101 ~ 1000",
+          "max": "",
+          "unit": "Vdc",
+          "document": "cq",
+          "evidence": {
+            "page": 2,
+            "box": [
+              0.510734,
+              0.111574,
+              0.570935,
+              0.121355
+            ],
+            "excerpt": "Opera�ng Voltage Range [Vdc] 101 ~ 1000"
+          }
+        },
+        {
+          "id": "cq.voltage",
+          "section": "CQ16",
+          "name": "Nominal Voltage",
+          "symbol": "",
+          "applies": [
+            "CQ16"
+          ],
+          "condition": "Nominal",
+          "min": "",
+          "typ": "51.2",
+          "max": "",
+          "unit": "Vdc",
+          "document": "cq",
+          "evidence": {
+            "page": 2,
+            "box": [
+              0.530314,
+              0.437838,
+              0.55401,
+              0.447619
+            ],
+            "excerpt": "Nominal Voltage [Vdc] 51.2"
+          }
+        },
+        {
+          "id": "cq.capacity",
+          "section": "CQ16",
+          "name": "Nominal Capacity [Ah]",
+          "symbol": "",
+          "applies": [
+            "CQ16"
+          ],
+          "condition": "Nominal",
+          "min": "",
+          "typ": "314",
+          "max": "",
+          "unit": "Ah",
+          "document": "cq",
+          "evidence": {
+            "page": 2,
+            "box": [
+              0.532013,
+              0.478685,
+              0.552311,
+              0.488467
+            ],
+            "excerpt": "Nominal Capacity [Ah] 314"
+          }
+        },
+        {
+          "id": "cq.energy",
+          "section": "CQ16",
+          "name": "Nominal Capacity [kWh]",
+          "symbol": "",
+          "applies": [
+            "CQ16"
+          ],
+          "condition": "Nominal",
+          "min": "",
+          "typ": "16.07",
+          "max": "",
+          "unit": "kWh",
+          "document": "cq",
+          "evidence": {
+            "page": 2,
+            "box": [
+              0.526916,
+              0.499109,
+              0.557395,
+              0.50889
+            ],
+            "excerpt": "Nominal Capacity [kWh] 16.07"
+          }
+        },
+        {
+          "id": "cq.peak",
+          "section": "CQ16",
+          "name": "Peak Discharge Current",
+          "symbol": "",
+          "applies": [
+            "CQ16"
+          ],
+          "condition": "Por 60 s",
+          "min": "",
+          "typ": "470 @60S",
+          "max": "",
+          "unit": "A",
+          "document": "cq",
+          "evidence": {
+            "page": 2,
+            "box": [
+              0.514663,
+              0.56038,
+              0.569648,
+              0.570161
+            ],
+            "excerpt": "Peak Discharge Current [A] 470 @60S"
+          }
+        }
+      ],
+      "pages": [
+        {
+          "n": 1,
+          "w": 595.275,
+          "h": 807.874,
+          "img": "pv-pages/cq-01.jpg"
+        },
+        {
+          "n": 2,
+          "w": 595.276,
+          "h": 807.874,
+          "img": "pv-pages/cq-02.jpg"
+        }
+      ],
+      "source": {
+        "title": "EN-CQ16-CQBOX-Datasheet-V1.3-20251024",
+        "docId": "CQ",
+        "revision": "1.3 · 2025-10-24",
+        "pages": 2,
+        "sha256": "d3098bfc10d4f1271a7f57346f6546d2a556ffe7b07f8016a8d7f0af762e688e",
+        "bytes": 611326,
+        "url": "https://www.fox-ess.com/Public/Uploads/uploadfile/files/20251203/ENCQ16CQBOXDatasheetV1.320251024.pdf",
+        "manufacturer": "Fox ESS",
+        "renderedPages": [
+          1,
+          2
+        ]
+      }
+    }
+  ]
+}

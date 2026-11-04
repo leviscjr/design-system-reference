@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /* Build: concatena as fontes modulares em UM HTML autocontido (executável via file://, sem rede).
  * Uso: node sea/shell/build.cjs  →  sea/shell/index.html
- * Fontes: src/styles/*.css, src/**.js (ordem explícita abaixo), src/assets/pages/*.jpg (inline como data URI),
- * src/demo/fixture.generated.json (gerado por tools/prepare_fixture.py a partir do PDF oficial). */
+ * Fontes: src/styles/*.css, src/**.js (ordem explícita abaixo), src/assets/pv-pages/*.jpg (inline como data URI),
+ * src/demo/pv.generated.json (gerado por tools/prepare_pv_fixture.py a partir dos PDFs oficiais). */
 const fs = require('fs'), path = require('path'), crypto = require('crypto');
 const root = __dirname, src = (p) => path.join(root, 'src', p);
 const read = (p) => fs.readFileSync(src(p), 'utf8').replace(/\r\n/g, '\n');
@@ -13,9 +13,9 @@ const js = [
   'core/inspector.js', 'core/topbar.js', 'core/palette.js', 'atmosphere/atmosphere.js', 'atmosphere/original-adapter.js', 'core/shell.js',
   'demo/fixture.js', 'demo/viewers/pdf.js', 'demo/viewers/table.js', 'demo/viewers/structure.js', 'demo/viewers/record.js', 'demo/inspect.js', 'demo/main.js',
 ];
-const fx = JSON.parse(read('demo/fixture.generated.json'));
+const fx = JSON.parse(read('demo/pv.generated.json'));
 const pages = {};
-fx.pages.forEach((p) => { pages[p.n] = 'data:image/jpeg;base64,' + fs.readFileSync(src('assets/' + p.img)).toString('base64'); });
+fx.documents.forEach(d => { pages[d.key] = {}; d.pages.forEach(p => { pages[d.key][p.n] = 'data:image/jpeg;base64,' + fs.readFileSync(src('assets/' + p.img)).toString('base64'); }); });
 const original = { vert: read('atmosphere/shaders/atmosphere.vert'), frag: read('atmosphere/shaders/atmosphere.frag'), tokens: JSON.parse(read('atmosphere/sea.tokens.json')).atmosphere };
 const data = `window.__FIXTURE__=${JSON.stringify(fx)};window.__FIXTURE_PAGES__=${JSON.stringify(pages)};window.__SEA_ORIGINAL__=${JSON.stringify(original)};`;
 const code = js.map((f) => `/* ---- ${f} ---- */\n${read(f)}`).join('\n').replace(/<\/script/gi, '<\\/script');
@@ -29,4 +29,4 @@ console.log(`ok  ${path.relative(process.cwd(), out)}  ${(html.length / 1024).to
 // verificação estática: nenhuma referência externa
 const ext = html.match(/(?:src|href)\s*=\s*["']https?:\/\/[^"']+/gi) || [];
 const imp = html.match(/@import|url\(\s*["']?https?:/gi) || [];
-if (ext.length && ext.some((e) => !/ti\.com/.test(e)) || imp.length) { console.error('ERRO: referência externa encontrada', ext, imp); process.exit(1); }
+if (ext.length || imp.length) { console.error('ERRO: referência externa encontrada', ext, imp); process.exit(1); }
