@@ -3,9 +3,10 @@
 Workspace universal — Topbar compacta · Explorer · Canvas (ContentHost) · Inspector · Actionbar — com a identidade atmosférica SEA.
 O shell **não conhece o domínio**: recebe conteúdo e seleção por contratos. A associação com o Remora é só um *caso de uso* (documentos técnicos); SEA é só identidade visual.
 
-- **Executar:** abrir [`index.html`](./index.html) (autocontido, `file://`, sem rede).
+- **Executar:** abrir [`index.html`](./index.html) (autocontido, `file://`, sem rede). A v0.2 recupera o shader e a fonte da SEA original; [comparação, hashes e capturas](./tests/SEA-V02-COMPARISON.md).
 - **Fontes:** `src/` (módulos simples, sem framework). **Build:** `node sea/shell/build.cjs` → regera `index.html`.
 - **Validar:** `NODE_PATH=$(npm root -g) node sea/shell/tests/validate.cjs` → [`tests/RESULTS.md`](./tests/RESULTS.md).
+- **Motor:** `node sea/shell/tests/atmosphere.cjs` verifica WebGL e fallback sem WebGL; com Chrome instalado fora do caminho padrão do Playwright, defina `SEA_CHROME_PATH` para o executável. A suíte requer o pacote `playwright` apenas para desenvolvimento.
 - Escopo: T2U apenas. Contratos normativos (`DESIGN_SYSTEM.md`, `tokens.json`, `reference.html`, `project.yaml`) **não foram alterados**; as cores semânticas reutilizam `tokens.json` (`--sa-*`). O repositório Remora foi lido (somente leitura) para entender objetos e fluxo.
 
 ## Componentes
@@ -67,7 +68,7 @@ Gooey: glide de seleção do Explorer e cápsulas da barra flutuante. Morph: ele
 
 ## Limites conhecidos
 
-- Identidade SEA reconstruída a partir de `tokens.json` e das características descritas; o código SEA anterior (`sea/`, commit `69701c9`) não estava disponível neste repositório. A "velocidade anterior" é a constante de referência 1,0 deste código.
+- O shader SEA anterior foi recuperado do ZIP fornecido; o host é adaptado ao shell e a velocidade 1,0 segue a referência experimental do shell. Resolução fixa 0,4; sem ajuste automático de qualidade.
 - Validado em Chromium headless (renderização por software). Não testados: Safari/Firefox, dispositivos reais, leitor de tela (apenas atributos ARIA), gestos de toque no sheet (há toque para alternar; arrastar o sheet não foi implementado).
 - Tela de PDF = páginas rasterizadas + caixas de evidência (sem camada de texto/seleção de texto no PDF).
 - Estados de revisão não persistem; layout, tema, viewer, seleção, filtros e zoom do PDF persistem em `localStorage`.

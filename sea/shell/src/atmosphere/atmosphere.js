@@ -13,7 +13,7 @@
   SEA.SeaAtmosphere = function (opts) {
     opts = opts || {};
     const scale = 0.5;
-    let cv, g, W = 0, H = 0, theme = 'dark', speed = SEA.motion.ambient, t = 18, raf = 0, last = 0, acc = 0;
+    let cv, g, W = 0, H = 0, theme = 'dark', speed = SEA.motion.ambient, t = 18, raf = 0, last = 0, acc = 0, unsubscribe;
     const rings = [];
     const rnd = mulberry(7);
     const parts = Array.from({ length: 38 }, () => ({ x: rnd(), y: rnd(), s: 0.5 + rnd() * 1.4, v: 0.004 + rnd() * 0.01, ph: rnd() * 6.28, sw: 0.01 + rnd() * 0.03 }));
@@ -75,14 +75,15 @@
     }
     function start() { if (raf || document.hidden || SEA.motion.reduced || (speed <= 0 && !rings.length)) return; last = performance.now(); raf = requestAnimationFrame(loop); }
     function stop() { cancelAnimationFrame(raf); raf = 0; }
+    function visibility() { document.hidden ? stop() : start(); }
 
     return {
       mount(parent) {
         cv = document.createElement('canvas'); cv.className = 'atmo-cv'; cv.setAttribute('aria-hidden', 'true');
         parent.appendChild(cv); g = cv.getContext('2d');
         size(); addEventListener('resize', size);
-        document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
-        SEA.motion.bus.on('reduced', (r) => { r ? (stop(), draw()) : start(); });
+        document.addEventListener('visibilitychange', visibility);
+        unsubscribe = SEA.motion.bus.on('reduced', (r) => { r ? (stop(), draw()) : start(); });
         start();
       },
       setTheme(th) { theme = th === 'light' ? 'light' : 'dark'; draw(); },
@@ -91,7 +92,7 @@
       get time() { return t; },
       get running() { return !!raf; },
       ping(x, y) { if (SEA.motion.reduced || !g) return; rings.push({ x, y, t0: performance.now() }); if (!raf) { const f = () => { draw(); if (rings.length) requestAnimationFrame(f); }; requestAnimationFrame(f); } },
-      destroy() { stop(); cv && cv.remove(); },
+      destroy() { stop(); removeEventListener('resize', size); document.removeEventListener('visibilitychange', visibility); if (unsubscribe) unsubscribe(); rings.length = 0; cv && cv.remove(); g = null; },
     };
   };
 })();

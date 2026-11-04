@@ -262,7 +262,7 @@ const idle = (p, ms = 6000) => p.waitForFunction(() => !SEA.u.Spring.busy() && !
   p = await open({ reduced: true });
   await check('T25', 'Reduced motion: sem voo de morph, painéis sem animação, atmosfera estática', async () => {
     const r0 = await p.evaluate(() => ({ red: SEA.motion.reduced, run: SEA.app.atmosphere.running }));
-    const px = () => p.evaluate(() => { const c = document.querySelector('.atmo-cv'); const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data; let h = 0; for (let i = 0; i < d.length; i += 97) h = (h * 31 + d[i]) | 0; return h; });
+    const px = () => p.evaluate(() => { const c = document.querySelector('.atmo-cv'); const gl = c.getContext('webgl'); let d; if (gl) { d = new Uint8Array(c.width * c.height * 4); gl.readPixels(0, 0, c.width, c.height, gl.RGBA, gl.UNSIGNED_BYTE, d); } else d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data; let h = 0; for (let i = 0; i < d.length; i += 97) h = (h * 31 + d[i]) | 0; return h; });
     const h0 = await px(); await p.waitForTimeout(900); const h1 = await px();
     await p.keyboard.press('Control+b'); await p.waitForTimeout(80); const ex = await w('.ex');
     await p.click('.row[data-id="par:rec.io"] .lb').catch(() => {}); await p.waitForTimeout(30); const gh = await p.evaluate(() => document.querySelectorAll('.ghost').length);

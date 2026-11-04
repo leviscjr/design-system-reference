@@ -1,0 +1,276 @@
+{
+  "$note": "SEA — Ocean Atmospheric UI. Fonte única de tokens da identidade SEA. O build (build.mjs) gera as variáveis CSS (--sea-*) e o objeto JS SEA.tokens a partir deste arquivo. Status: EXPERIMENTAL — nada aqui é promovido aos tokens globais do UDS (tokens.json / tokens.vnext.json permanecem intocados).",
+  "meta": {
+    "name": "sea",
+    "version": "0.1.0",
+    "status": "experimental",
+    "cssPrefix": "--sea-",
+    "provenance": {
+      "candidate": "valor novo da identidade SEA, ajustado visualmente nesta branch; exige homologação humana",
+      "fixed": "convenção técnica sem escolha estética (alvo de toque, anel de foco)",
+      "derived-uds": "intenção herdada do UDS vNext (proposals/motion.md: enter desacelera, exit acelera, motion é feedback)"
+    }
+  },
+  "identity": {
+    "$provenance": "candidate",
+    "light": {
+      "abyss": "#0b4a5c",
+      "ink": "#062a33",
+      "ink-2": "#183c44",
+      "ink-3": "#4a6b72",
+      "surface": "rgba(246, 252, 252, 0.74)",
+      "surface-strong": "rgba(250, 254, 254, 0.9)",
+      "surface-sunk": "rgba(214, 238, 240, 0.55)",
+      "hairline": "rgba(6, 64, 77, 0.14)",
+      "hairline-strong": "rgba(6, 64, 77, 0.28)",
+      "accent": "#0b7f8c",
+      "accent-ink": "#ffffff",
+      "accent-soft": "rgba(11, 127, 140, 0.12)",
+      "glow": "rgba(255, 255, 240, 0.9)",
+      "focus": "#0a6d79",
+      "ok": "#13795b",
+      "warn": "#9a5b00",
+      "error": "#b4332b",
+      "shadow": "0 1px 0 rgba(255,255,255,0.7) inset, 0 18px 40px -22px rgba(3, 48, 60, 0.45), 0 2px 6px -2px rgba(3, 48, 60, 0.18)",
+      "blur": "18px"
+    },
+    "dark": {
+      "abyss": "#01070b",
+      "ink": "#e3f4f4",
+      "ink-2": "#a6c3c6",
+      "ink-3": "#7f9da2",
+      "surface": "rgba(7, 22, 30, 0.62)",
+      "surface-strong": "rgba(9, 27, 36, 0.86)",
+      "surface-sunk": "rgba(2, 10, 15, 0.5)",
+      "hairline": "rgba(140, 220, 225, 0.12)",
+      "hairline-strong": "rgba(140, 220, 225, 0.26)",
+      "accent": "#5fd4cf",
+      "accent-ink": "#02161a",
+      "accent-soft": "rgba(95, 212, 207, 0.14)",
+      "glow": "rgba(120, 240, 225, 0.85)",
+      "focus": "#7fe3dc",
+      "ok": "#5fd39a",
+      "warn": "#e8b25c",
+      "error": "#ff8f84",
+      "shadow": "0 1px 0 rgba(160,240,240,0.06) inset, 0 24px 60px -28px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(0,0,0,0.2)",
+      "blur": "22px"
+    }
+  },
+  "shape": {
+    "$provenance": "candidate",
+    "radius-s": "10px",
+    "radius-m": "16px",
+    "radius-l": "24px",
+    "radius-pill": "999px",
+    "touch-min": "44px",
+    "focus-ring": "2px"
+  },
+  "atmosphere": {
+    "$provenance": "candidate",
+    "$note": "Parâmetros do shader único de atmosfera (src/atmosphere/shaders/atmosphere.frag). Multiplicados em runtime por intensidade (0–1.5) e modo de movimento.",
+    "light": {
+      "top": [
+        0.84,
+        0.96,
+        0.95
+      ],
+      "mid": [
+        0.52,
+        0.81,
+        0.83
+      ],
+      "deep": [
+        0.27,
+        0.62,
+        0.67
+      ],
+      "rayColor": [
+        1.0,
+        0.97,
+        0.86
+      ],
+      "causticColor": [
+        0.92,
+        1.0,
+        0.97
+      ],
+      "particleColor": [
+        0.95,
+        1.0,
+        0.98
+      ],
+      "bioColor": [
+        0.55,
+        0.95,
+        0.9
+      ],
+      "rays": 0.62,
+      "caustics": 0.34,
+      "particles": 0.55,
+      "bio": 0.0,
+      "contours": 0.1,
+      "fog": 0.55,
+      "life": 0.18,
+      "current": 0.35
+    },
+    "dark": {
+      "top": [
+        0.03,
+        0.13,
+        0.17
+      ],
+      "mid": [
+        0.01,
+        0.06,
+        0.09
+      ],
+      "deep": [
+        0.0,
+        0.012,
+        0.02
+      ],
+      "rayColor": [
+        0.45,
+        0.75,
+        0.85
+      ],
+      "causticColor": [
+        0.35,
+        0.7,
+        0.75
+      ],
+      "particleColor": [
+        0.55,
+        0.85,
+        0.9
+      ],
+      "bioColor": [
+        0.35,
+        1.0,
+        0.85
+      ],
+      "rays": 0.12,
+      "caustics": 0.08,
+      "particles": 0.42,
+      "bio": 0.8,
+      "contours": 0.22,
+      "fog": 0.7,
+      "life": 0.28,
+      "current": 0.3
+    },
+    "depthBySection": {
+      "$note": "Cada seção da navegação corresponde a uma profundidade perceptiva; o ambiente desce/sobe com a navegação.",
+      "panorama": 0,
+      "estacoes": 18,
+      "correntes": 42,
+      "missoes": 85,
+      "registro": 140
+    },
+    "readiness": {
+      "ready": [
+        0.85,
+        1.0,
+        0.97
+      ],
+      "busy": [
+        0.55,
+        0.85,
+        1.0
+      ],
+      "done": [
+        0.55,
+        1.0,
+        0.8
+      ],
+      "error": [
+        1.0,
+        0.55,
+        0.45
+      ]
+    }
+  },
+  "motion": {
+    "$provenance": "candidate / derived-uds",
+    "$note": "Receitas de movimento. Springs: stiffness (k), damping (c), mass (m). Durações só onde não há física (cor, opacidade).",
+    "recipes": {
+      "fluid": {
+        "k": 210,
+        "c": 27,
+        "m": 1,
+        "use": "indicador da navbar, reposicionamentos"
+      },
+      "drift": {
+        "k": 40,
+        "c": 14,
+        "m": 1,
+        "use": "profundidade do ambiente, parallax"
+      },
+      "float": {
+        "k": 90,
+        "c": 16,
+        "m": 1,
+        "use": "elementos suspensos, chips"
+      },
+      "spring-soft": {
+        "k": 170,
+        "c": 24,
+        "m": 1,
+        "use": "padrão de UI; overshoot mínimo"
+      },
+      "magnetic": {
+        "k": 260,
+        "c": 20,
+        "m": 1,
+        "use": "atração por proximidade"
+      },
+      "morph": {
+        "k": 190,
+        "c": 27,
+        "m": 1,
+        "use": "card → inspector → painel"
+      },
+      "enter": {
+        "duration": "280ms",
+        "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "use": "entrada: desacelera ao chegar"
+      },
+      "exit": {
+        "duration": "180ms",
+        "easing": "cubic-bezier(0.4, 0, 1, 1)",
+        "use": "saída: acelera ao sair"
+      },
+      "reduced": {
+        "duration": "120ms",
+        "easing": "linear",
+        "use": "substitui toda física quando movimento reduzido"
+      }
+    },
+    "presets": {
+      "$note": "Multiplicadores do laboratório de comparação.",
+      "suave": {
+        "k": 0.75,
+        "c": 1.15
+      },
+      "fluida": {
+        "k": 1.0,
+        "c": 1.0
+      },
+      "expressiva": {
+        "k": 1.25,
+        "c": 0.62
+      }
+    },
+    "color": "420ms",
+    "theme": "900ms"
+  },
+  "interaction": {
+    "$provenance": "candidate",
+    "magnetRadius": 110,
+    "magnetPull": 0.28,
+    "navCondenseScroll": 72,
+    "navRevealProximity": 84,
+    "dockMinWidth": 1100,
+    "inspectorWidth": 420,
+    "sheetRatio": 0.58
+  }
+}
